@@ -25,6 +25,12 @@ const userSchema = new Schema({
       ref: 'Quote',
     },
   ],
+  goal: [
+    { 
+      type: Schema.Types.ObjectId,
+      ref: 'Goal',
+    },
+  ],
 });
 
 userSchema.pre('save', async function (next) {
