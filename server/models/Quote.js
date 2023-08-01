@@ -26,4 +26,4 @@ const quoteSchema = new Schema({
 
 const Quote = model('Quote', quoteSchema);
 
-module.exports = Thought;
+module.exports = Quote;
