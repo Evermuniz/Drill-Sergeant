@@ -31,6 +31,12 @@ const userSchema = new Schema({
       ref: 'Goal',
     },
   ],
+  exercise: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Exercise',
+    },
+  ],
 });
 
 userSchema.pre('save', async function (next) {
