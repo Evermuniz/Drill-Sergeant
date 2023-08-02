@@ -1,21 +1,21 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Goal } = require('../models');
+const { User, Goal, Quote, Exercise } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
     users: async () => {
-      return User.find().populate('thoughts');
+      return User.find().populate('goals quotes exercises');
     },
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate('thoughts');
+      return User.findOne({ username }).populate('goals quotes exercises');
     },
-    thoughts: async (parent, { username }) => {
+    goals: async (parent, { username }) => {
       const params = username ? { username } : {};
-      return Thought.find(params).sort({ createdAt: -1 });
+      return Goal.find(params).sort({ createdAt: -1 });
     },
-    thought: async (parent, { thoughtId }) => {
-      return Thought.findOne({ _id: thoughtId });
+    goal: async (parent, { goalId }) => {
+      return Goal.findOne({ _id: goalId });
     },
     me: async (parent, args, context) => {
       if (context.user) {
