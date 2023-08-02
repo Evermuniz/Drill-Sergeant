@@ -1,31 +1,23 @@
 const db = require('../config/connection');
-const { User, Thought } = require('../models');
-const userSeeds = require('./userSeeds.json');
-const thoughtSeeds = require('./thoughtSeeds.json');
+const { Quote } = require('../models');
+const quoteSeeds = require('./quoteSeeds.json');
 
-db.once('open', async () => {
+
+const seedQuotes = async () => {
   try {
-    await Thought.deleteMany({});
-    await User.deleteMany({});
+    await db.once('open', async () => {
+    
+      await Quote.deleteMany({});
 
-    await User.create(userSeeds);
+      await Quote.insertMany(quoteSeeds);
 
-    for (let i = 0; i < thoughtSeeds.length; i++) {
-      const { _id, thoughtAuthor } = await Thought.create(thoughtSeeds[i]);
-      const user = await User.findOneAndUpdate(
-        { username: thoughtAuthor },
-        {
-          $addToSet: {
-            thoughts: _id,
-          },
-        }
-      );
-    }
+      console.log('Quotes have been successfully seeded.');
+      process.exit(0);
+    });
   } catch (err) {
-    console.error(err);
+    console.error('Error seeding quotes:', err);
     process.exit(1);
   }
+};
 
-  console.log('all done!');
-  process.exit(0);
-});
+seedQuotes();

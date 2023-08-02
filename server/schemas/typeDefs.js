@@ -7,7 +7,6 @@ const typeDefs = gql`
     email: String
     password: String
     goals: [Goal]
-    quotes: [Quote]
     Exercise: [Exercise]
   }
 

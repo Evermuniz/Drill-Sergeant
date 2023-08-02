@@ -19,12 +19,6 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
-  quote: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Quote',
-    },
-  ],
   goal: [
     { 
       type: Schema.Types.ObjectId,
