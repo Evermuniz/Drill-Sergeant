@@ -1,4 +1,6 @@
 const User = require('./User');
-const Thought = require('./Thought');
+const Goal = require('./Goal');
+const Quote = require('./Quote');
+const Exercise = require('./Exercise');
 
-module.exports = { User, Thought };
+module.exports = { User, Goal, Quote, Exercise };

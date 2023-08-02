@@ -6,22 +6,27 @@ const typeDefs = gql`
     username: String
     email: String
     password: String
-    thoughts: [Thought]!
+    goals: [Goal]
+    quotes: [Quote]
+    Exercise: [Exercise]
   }
 
-  type Thought {
+  type Goal{
     _id: ID
-    thoughtText: String
-    thoughtAuthor: String
+    goalText: String
     createdAt: String
-    comments: [Comment]!
   }
 
-  type Comment {
+  type Quote {
     _id: ID
-    commentText: String
-    commentAuthor: String
-    createdAt: String
+    quoteText: String
+  }
+
+  type Exercise {
+    name: String
+    type: String
+    muscle: String
+    difficulty: String
   }
 
   type Auth {
@@ -32,18 +37,19 @@ const typeDefs = gql`
   type Query {
     users: [User]
     user(username: String!): User
-    thoughts(username: String): [Thought]
-    thought(thoughtId: ID!): Thought
+    goals(username: String): [Goal]
+    goal(goalId: ID!): Goal
+    Exercise: [Exercise]
     me: User
   }
 
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addThought(thoughtText: String!): Thought
-    addComment(thoughtId: ID!, commentText: String!): Thought
-    removeThought(thoughtId: ID!): Thought
-    removeComment(thoughtId: ID!, commentId: ID!): Thought
+    addGoal(goalText: String!): Goal
+    addExercise(name: String!, type: String!, muscle: String!, difficulty: String!): Exercise
+    removeGoal(goalId: ID!): Goal
+    removeExercise(exerciseId: ID!): Exercise
   }
 `;
 

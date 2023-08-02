@@ -19,10 +19,22 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
-  thoughts: [
+  quote: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Thought',
+      ref: 'Quote',
+    },
+  ],
+  goal: [
+    { 
+      type: Schema.Types.ObjectId,
+      ref: 'Goal',
+    },
+  ],
+  exercise: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Exercise',
     },
   ],
 });
