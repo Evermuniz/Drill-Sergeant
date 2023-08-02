@@ -5,10 +5,10 @@ const { signToken } = require('../utils/auth');
 const resolvers = {
   Query: {
     users: async () => {
-      return User.find().populate('goals quotes exercises');
+      return User.find().populate('goals exercises');
     },
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate('goals quotes exercises');
+      return User.findOne({ username }).populate('goals exercises');
     },
     goals: async (parent, { username }) => {
       const params = username ? { username } : {};
@@ -17,16 +17,16 @@ const resolvers = {
     goal: async (parent, { goalId }) => {
       return Goal.findOne({ _id: goalId });
     },
-    exercises: async (parent, { username }) => {
-      const params = username ? { username } : {};
-      return Exercise.find(params).sort({ createdAt: -1 });
-    },
-    exercise: async (parent, { exerciseId }) => {
-      return Exercise.findOne({ _id: exerciseId });
-    },
+    // exercises: async (parent, { username }) => {
+    //   const params = username ? { username } : {};
+    //   return Exercise.find(params).sort({ createdAt: -1 });
+    // },
+    // exercise: async (parent, { exerciseId }) => {
+    //   return Exercise.findOne({ _id: exerciseId });
+    // },
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate('goals quotes exercises');
+        return User.findOne({ _id: context.user._id }).populate('goals exercises');
       }
       throw new AuthenticationError('You need to be logged in!');
     },
@@ -59,7 +59,6 @@ const resolvers = {
       if (context.user) {
         const goal = await Goal.create({
           goalText,
-          goalAuthor: context.user.username,
         });
 
         await User.findOneAndUpdate(
@@ -88,22 +87,6 @@ const resolvers = {
     //   }
     //   throw new AuthenticationError('You need to be logged in!');
     // },
-    removeThought: async (parent, { thoughtId }, context) => {
-      if (context.user) {
-        const thought = await Thought.findOneAndDelete({
-          _id: thoughtId,
-          thoughtAuthor: context.user.username,
-        });
-
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { thoughts: thought._id } }
-        );
-
-        return thought;
-      }
-      throw new AuthenticationError('You need to be logged in!');
-    },
     removeGoal: async (parent, { goalId }, context) => {
       if (context.user) {
         const goal = await Goal.findOneAndDelete({
