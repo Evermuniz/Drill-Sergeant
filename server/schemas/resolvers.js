@@ -17,9 +17,16 @@ const resolvers = {
     goal: async (parent, { goalId }) => {
       return Goal.findOne({ _id: goalId });
     },
+    exercises: async (parent, { username }) => {
+      const params = username ? { username } : {};
+      return Exercise.find(params).sort({ createdAt: -1 });
+    },
+    exercise: async (parent, { exerciseId }) => {
+      return Exercise.findOne({ _id: exerciseId });
+    },
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate('thoughts');
+        return User.findOne({ _id: context.user._id }).populate('goals quotes exercises');
       }
       throw new AuthenticationError('You need to be logged in!');
     },
