@@ -1,14 +1,14 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Goal, Quote, Exercise } = require('../models');
+const { User, Goal, Quote, Workout } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
     users: async () => {
-      return User.find().populate('goals exercises');
+      return User.find().populate('goals workouts');
     },
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate('goals exercises');
+      return User.findOne({ username }).populate('goals workouts');
     },
     goals: async (parent, { username }) => {
       const params = username ? { username } : {};
@@ -17,13 +17,13 @@ const resolvers = {
     goal: async (parent, { goalId }) => {
       return Goal.findOne({ _id: goalId });
     },
-    // exercises: async (parent, { username }) => {
-    //   const params = username ? { username } : {};
-    //   return Exercise.find(params).sort({ createdAt: -1 });
-    // },
-    // exercise: async (parent, { exerciseId }) => {
-    //   return Exercise.findOne({ _id: exerciseId });
-    // },
+   workouts: async (parent, { username }) => {
+      const params = username ? { username } : {};
+      return Workout.find(params).sort({ createdAt: -1 });
+    },
+    workout: async (parent, { workoutId }) => {
+      return Workout.findOne({ _id: workoutId });
+    },
     me: async (parent, args, context) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id }).populate('goals exercises');
@@ -70,6 +70,21 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
+    addWorkout: async (parent, { workoutText }, context) => {
+      if (context.user) {
+        const workout = await Workout.create({
+          workoutText,
+        });
+
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { workouts: workout._id } }
+        );
+
+        return workout;
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    },
     // addComment: async (parent, { thoughtId, commentText }, context) => {
     //   if (context.user) {
     //     return Thought.findOneAndUpdate(
@@ -100,6 +115,22 @@ const resolvers = {
         );
 
         return goal;
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    },
+    removeWorkout: async (parent, { workoutId }, context) => {
+      if (context.user) {
+        const workout = await Workout.findOneAndDelete({
+          _id: workoutId,
+          workoutAuthor: context.user.username,
+        });
+
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { workouts: workout._id } }
+        );
+
+        return workout;
       }
       throw new AuthenticationError('You need to be logged in!');
     },
