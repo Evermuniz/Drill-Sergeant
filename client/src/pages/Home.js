@@ -1,37 +1,79 @@
-import React from 'react';
-import { useQuery } from '@apollo/client';
+// import React, { useLayoutEffect } from "react";
+// import { gsap } from "gsap";
 
-import ThoughtList from '../components/ThoughtList';
-import ThoughtForm from '../components/ThoughtForm';
+import React, { useLayoutEffect, useRef } from "react";
+import { gsap } from "gsap";
 
-import { QUERY_THOUGHTS } from '../utils/queries';
+function Home() {
+  const testimonialsData = [
+    {
+      name: "Hannah S.",
+      body: "Who knew that getting insulted could be so motivating? The Drill Sergeant Fitness app is unlike anything I've ever tried. The funny insults push me to work harder, and it's a great stress-buster too. I love this unique approach to fitness!",
+    },
+    {
+      name: "Jake M. ",
+      body: "I used to dread workouts, but now I can't wait for my daily 'insult fix' from the app. It's amazing how a well-timed joke can make those burpees feel less daunting. Thanks to Drill Sergeant Fitness, I'm more consistent and determined to reach my goals.",
+    },
+    {
+      name: "Amanda R",
+      body: "The humor in this app is gold! It's what keeps me going when I feel like giving up. The virtual drill sergeants crack me up even on the toughest days. I'm making progress, and I'm having a blast doing it!",
+    },
+    {
+      name: "Alex D.",
+      body: "Drill Sergeant Fitness is the perfect blend of tough love and comic relief. The workouts are challenging, and the insults are hilariously motivating. It's like having a personal cheerleader who also happens to be a stand-up comedian!",
+    },
+  ];
+  const testimonialsList = testimonialsData.map((testimonialsData, index) => (
+    <div key={index} className="card mb-3 testimonials">
+      <div className="card-body">
+        <blockquote className="blockquote mb-0">
+          <p>"{testimonialsData.body}"</p>
+          <footer className="blockquote-footer">{testimonialsData.name}</footer>
+        </blockquote>
+      </div>
+    </div>
+  ));
 
-const Home = () => {
-  const { loading, data } = useQuery(QUERY_THOUGHTS);
-  const thoughts = data?.thoughts || [];
+  const home = useRef();
+
+  useLayoutEffect(() => {
+    let ctx = gsap.context(() => {
+      gsap.to(".box", {
+        y: -500,
+        delay: 1,
+        duration: 2,
+        opacity: 1,
+        fill: "#000000",
+        immediateRender: false,
+      });
+    }, home.current);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <main>
-      <div className="flex-row justify-center">
-        <div
-          className="col-12 col-md-10 mb-3 p-3"
-          style={{ border: '1px dotted #1a1a1a' }}
-        >
-          <ThoughtForm />
-        </div>
-        <div className="col-12 col-md-8 mb-3">
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
-            <ThoughtList
-              thoughts={thoughts}
-              title="Some Feed for Thought(s)..."
-            />
-          )}
-        </div>
+    <main className="home">
+      {" "}
+      <div className="flex-row justify-center box">
+        {" "}
+        <div className="landingPageText">
+          <h1 className="text-center card-title">About Us:</h1>{" "}
+          <p className="text-center">
+            Welcome to Drill Sergeant Fitness, where tough love meets humor for epic gains! Our app is all about pushing
+            you to new heights with a touch of laughter. Set your fitness goals, and our hilarious virtual drill
+            sergeants will keep you motivated with funny insults that pack a punch. It's tough love with a twist! Join
+            our supportive community, smash your fitness targets, and have a blast along the way. Embrace the sweat, the
+            struggle, and the snark - Drill Sergeant Fitness is here to make your fitness journey exciting and
+            effective. Get ready to laugh, work hard, and achieve big gains with our unique approach to fitness!{" "}
+          </p>{" "}
+        </div>{" "}
+        <div>
+          <h2 className="text-center">Testimonials</h2> {testimonialsList}
+        </div>{" "}
       </div>
+      <div></div>{" "}
     </main>
   );
-};
+}
 
 export default Home;
