@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { useQuery } from "@apollo/client";
 
@@ -40,29 +40,30 @@ function Home() {
     </div>
   ));
 
-  const home = useRef();
+const animationContainerRef = useRef();
 
-  useLayoutEffect(() => {
-    let ctx = gsap.context(() => {
-      gsap.to(".box", {
-        y: -500,
-        delay: 1,
-        duration: 2,
-        opacity: 1,
-        fill: "#000000",
-        immediateRender: false,
-      });
-    }, home.current);
+useEffect(() => {
+  const animationContainer = animationContainerRef.current;
 
-    return () => ctx.revert();
-  }, []);
+  let ctx = gsap.context(() => {
+    gsap.to(".animation-container", {
+      y: -500,
+      delay: 1,
+      duration: 2,
+      opacity: 1,
+      fill: "#000000",
+      immediateRender: false,
+    });
+  }, animationContainer);
 
+  return () => ctx.revert();
+}, []);
   return (
     <main className="home">
       {" "}
-      <div className="flex-row justify-center box">
+      <div className="flex-row justify-center animation-container">
         {" "}
-        <div className="landingPageText">
+        <div className="landingPageText animation-container" ref={animationContainerRef}>
           <h1 className="text-center card-title">About Us:</h1>{" "}
           <p className="text-center">
             Welcome to Drill Sergeant Fitness, where tough love meets humor for epic gains! Our app is all about pushing
