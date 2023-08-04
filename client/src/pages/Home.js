@@ -1,10 +1,16 @@
-// import React, { useLayoutEffect } from "react";
-// import { gsap } from "gsap";
-
 import React, { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { useQuery } from "@apollo/client";
+
+import ThoughtList from "../components/ThoughtList";
+import ThoughtForm from "../components/ThoughtForm";
+
+import { QUERY_THOUGHTS } from "../utils/queries";
 
 function Home() {
+      const { loading, data } = useQuery(QUERY_THOUGHTS);
+      const thoughts = data?.thoughts || [];
+
   const testimonialsData = [
     {
       name: "Hannah S.",
