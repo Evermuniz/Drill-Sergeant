@@ -19,6 +19,13 @@ const typeDefs = gql`
     comments: [Comment]
   }
 
+  type Comment {
+    _id: ID
+    content: String
+    author: String
+    createdAt: String
+  }
+
   type Quote {
     _id: ID
     quoteText: String
