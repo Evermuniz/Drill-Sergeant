@@ -50,6 +50,7 @@ const typeDefs = gql`
     goal(goalId: ID!): Goal
     workouts(username: String): [Workout]
     workout(workoutId: ID!): Workout
+    quotes: [Quote]
     me: User
   }
 

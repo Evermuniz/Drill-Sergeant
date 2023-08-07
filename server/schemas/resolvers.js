@@ -24,6 +24,9 @@ const resolvers = {
     workout: async (parent, { workoutId }) => {
       return Workout.findOne({ _id: workoutId });
     },
+    quotes: async () => {
+      return Quote.find();
+    },
     me: async (parent, args, context) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id }).populate('goals workouts');
