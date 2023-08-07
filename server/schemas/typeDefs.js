@@ -22,17 +22,20 @@ const typeDefs = gql`
     quoteText: String
   }
 
+  type Set {
+    reps: Int
+    weight: Int
+  }
+
   type Exercise {
     name: String
-    type: String
-    muscle: String
-    difficulty: String
+    sets: [Set]!
   }
 
   type Workout {
     _id: ID
     date: String
-    exercises: [Exercise]
+    exercises: [Exercise]!
   }
 
   type Auth {
@@ -45,7 +48,8 @@ const typeDefs = gql`
     user(username: String!): User
     goals(username: String): [Goal]
     goal(goalId: ID!): Goal
-    Exercise: [Exercise]
+    workouts(username: String): [Workout]
+    workout(workoutId: ID!): Workout
     me: User
   }
 
