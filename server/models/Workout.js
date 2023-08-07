@@ -18,7 +18,6 @@ const exerciseSchema = new Schema({
         required: true,
     },
     sets: [SetSchema],
-    required: true,
 });
 
 const workoutSchema = new Schema({
@@ -28,7 +27,6 @@ const workoutSchema = new Schema({
         get: (timestamp) => dateFormat(timestamp),
     },
     exercises: [exerciseSchema],
-    required: true,
 });
 
 const Workout = model('Workout', workoutSchema);
