@@ -5,11 +5,6 @@ const quoteSchema = new Schema({
   quoteText: {
     type: String,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-    get: (timestamp) => dateFormat(timestamp),
-  },
 });
 
 const Quote = model('Quote', quoteSchema);

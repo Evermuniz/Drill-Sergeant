@@ -14,16 +14,7 @@ const typeDefs = gql`
     _id: ID
     goalText: String
     createdAt: String
-    startDate: String
     endDate: String
-    comments: [Comment]
-  }
-
-  type Comment {
-    _id: ID
-    content: String
-    author: String
-    createdAt: String
   }
 
   type Quote {
