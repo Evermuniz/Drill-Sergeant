@@ -57,9 +57,13 @@ const typeDefs = gql`
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
     addGoal(goalText: String!): Goal
-    addExercise(name: String!, type: String!, muscle: String!, difficulty: String!): Exercise
+    addSet(reps: Int!, weight: Int!): Set
+    addExercise: (name: String!, sets: [Set]!): Exercise
+    addWorkout: (exercises: [Exercise]!): Workout
     removeGoal(goalId: ID!): Goal
+    removeSet(setId: ID!): Set
     removeExercise(exerciseId: ID!): Exercise
+    removeWorkout(workoutId: ID!): Workout
   }
 `;
 
