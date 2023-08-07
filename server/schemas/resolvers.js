@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Goal, Quote, Workout } = require('../models');
+const { User, Goal, Quote, Workout, SetSchema, exerciseSchema } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -72,7 +72,7 @@ const resolvers = {
     },
     addSet : async (parent, { reps, weight}, context) => {
       if (context.user) {
-        const set = await setSchema.create({
+        const set = await SetSchema.create({
           reps,
           weight,
         });
@@ -134,7 +134,7 @@ const resolvers = {
     },
     removeSet : async (parent, { setId }, context) => {
       if (context.user) {
-        const set = await Set.findOneAndDelete({
+        const set = await SetSchema.findOneAndDelete({
           _id: setId,
         });
 
@@ -149,7 +149,7 @@ const resolvers = {
     },
     removeExercise: async (parent, { exerciseId }, context) => {
       if (context.user) {
-        const exercise = await Exercise.findOneAndDelete({
+        const exercise = await exerciseSchema.findOneAndDelete({
           _id: exerciseId,
         });
 
