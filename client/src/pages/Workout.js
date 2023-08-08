@@ -9,6 +9,10 @@ const Workouts = () => {
   const [options, setOptions] = useState([]);
   const [apiDataList, setApiDataList] = useState([]);
   const [selectedExerciseOption, setSelectedExerciseOption] = useState("");
+  const [selectedExercises, setSelectedExercises] = useState(new Set());
+  const [workoutStarted, setWorkoutStarted] = useState(false);
+  const [workoutSelected, setWorkoutSelected] = useState(false);
+  const [savedWorkouts, setSavedWorkouts] = useState([]);
 
   useEffect(() => {
     const fetchApiData = async () => {
@@ -58,12 +62,82 @@ const Workouts = () => {
   };
 
   const handleExerciseOptionChange = (event) => {
-    const selectedExerciseOption = event.target.textContent;
-    setSelectedExerciseOption([selectedExerciseOption]);
+    const selectedExercise = event.target.value;
+
+    if (selectedExercises.has(selectedExercise)) {
+      selectedExercises.delete(selectedExercise);
+    } else {
+      selectedExercises.clear();
+      selectedExercises.add(selectedExercise);
+      setSelectedExerciseOption(selectedExercise);
+    }
+
+    setWorkoutSelected(selectedExercises.size > 0);
+  };
+
+  const beginWorkout = () => {
+    setWorkoutStarted(true);
+    setWorkoutSelected(false);
+  };
+
+  const [sets, setSets] = useState(0);
+  const [reps, setReps] = useState(0);
+  const [weight, setWeight] = useState(0);
+
+  const handleSetsChange = (e) => {
+    setSets(e.target.value);
+  };
+
+  const handleRepsChange = (e) => {
+    setReps(e.target.value);
+  };
+
+  const handleWeightChange = (e) => {
+    setWeight(e.target.value);
+  };
+
+  const saveExercise = () => {
+    setWorkoutStarted(false);
+    const exerciseData = {
+      exerciseName: selectedExerciseOption,
+      sets: sets,
+      reps: reps,
+      weight: weight,
+    };
+
+    setSavedWorkouts((prevWorkouts) => [...prevWorkouts, exerciseData]);
+    setSelectedExerciseOption("");
+  };
+
+  const ExerciseInput = ({ exerciseName }) => {
+    return (
+      <div>
+        <h2 className="mt-5">{exerciseName}</h2>
+        <div>
+          <label>Sets: </label>
+          <input type="number" value={sets} onChange={(e) => setSets(e.target.value)} />
+        </div>
+        <div>
+          <label>Reps: </label>
+          <input type="number" value={reps} onChange={(e) => setReps(e.target.value)} />
+        </div>
+        <div>
+          <label>Weight: </label>
+          <input type="number" value={weight} onChange={(e) => setWeight(e.target.value)} />
+        </div>
+        <div>
+          <button className="btn btn-primary" onClick={saveExercise}>
+            Add Exercise
+          </button>
+        </div>
+      </div>
+    );
   };
 
   const makeApiCall = () => {
-    return fetch(`${apiURL}=${selectedOption}`, {
+    const apiURLWithOptions = `${apiURL}${selectedType}=${selectedOption}`;
+    console.log("API URL:", apiURLWithOptions);
+    return fetch(`${apiURL}${selectedType}=${selectedOption}`, {
       headers: {
         "X-Api-Key": apiKey,
       },
@@ -197,77 +271,114 @@ const Workouts = () => {
 
   return (
     <div>
-      <div className="dropdown">
-        <button
-          className="btn btn-secondary dropdown-toggle"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          {selectedType ? selectedType : "Select"}
-        </button>
-        <ul className="dropdown-menu">
-          <li>
-            <a className="dropdown-item" href="#" onClick={handleDropdownChange}>
-              Type
-            </a>
-          </li>
-          <li>
-            <a className="dropdown-item" href="#" onClick={handleDropdownChange}>
-              Muscle
-            </a>
-          </li>
-          <li>
-            <a className="dropdown-item" href="#" onClick={handleDropdownChange}>
-              Difficulty
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      {selectedType && (
-        <div className="dropdown">
-          <button
-            className="btn btn-secondary dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            {selectedOption ? selectedOption : "Select"}
-          </button>
-          <ul className="dropdown-menu options">
-            {options.map((item) => (
-              <li key={item.key}>
-                <a className="dropdown-item" href="#" onClick={handleOptionChange}>
-                  {item.name}
+      {!workoutStarted && (
+        <section id="workoutSelection">
+          <div className="dropdown">
+            <button
+              className="btn btn-secondary dropdown-toggle m-1"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {selectedType ? selectedType : "Select"}
+            </button>
+            <ul className="dropdown-menu">
+              <li>
+                <a className="dropdown-item" href="#" onClick={handleDropdownChange}>
+                  Type
                 </a>
               </li>
-            ))}
-          </ul>
+              <li>
+                <a className="dropdown-item" href="#" onClick={handleDropdownChange}>
+                  Muscle
+                </a>
+              </li>
+              <li>
+                <a className="dropdown-item" href="#" onClick={handleDropdownChange}>
+                  Difficulty
+                </a>
+              </li>
+            </ul>
+          </div>
 
-          {selectedOption && (
-            <div>
+          {selectedType && (
+            <div className="dropdown">
               <button
-                className="btn btn-secondary dropdown-toggle"
+                className="btn btn-secondary dropdown-toggle m-1"
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {selectedExerciseOption ? selectedExerciseOption : "Select"}
+                {selectedOption ? selectedOption : "Select"}
               </button>
-              <ul className="dropdown-menu exercises">
-                {apiDataList.map((exercise, index) => (
-                  <li key={index}>
-                    <a className="dropdown-item" href="#" onClick={handleExerciseOptionChange}>
-                      {exercise.name}
+              <ul className="dropdown-menu options">
+                {options.map((item) => (
+                  <li key={item.key}>
+                    <a className="dropdown-item" href="#" onClick={handleOptionChange}>
+                      {item.name}
                     </a>
                   </li>
                 ))}
               </ul>
+
+              {selectedOption && (
+                <div>
+                  <ul className="list-group">
+                    {apiDataList.map((exercise, index) => (
+                      <li className="list-group-item" key={index}>
+                        <input
+                          className="form-check-input me-1"
+                          type="radio"
+                          name="exerciseOptions"
+                          onChange={handleExerciseOptionChange}
+                          value={exercise.name}
+                        />
+                        <label className="form-check-label">{exercise.name}</label>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
-        </div>
+        </section>
       )}
+
+      <div className="exerciseTracker">
+        <div>
+          {workoutSelected && (
+            <div>
+              <button className="mt-3 btn btn-primary " onClick={beginWorkout}>
+                Begin Workout
+              </button>
+            </div>
+          )}
+          <div>
+            {workoutStarted && (
+              <div>
+                {workoutStarted && selectedExerciseOption && <ExerciseInput exerciseName={selectedExerciseOption} />}
+              </div>
+            )}
+          </div>
+          <div>
+         
+              <div className="exerciseContainer">
+                <h2>Workout in Progress</h2>
+                <ul>
+                  {savedWorkouts.map((exercise, index) => (
+                    <li key={index}>
+                      <strong>Exercise: </strong>
+                      {exercise.exerciseName},<strong> Sets: </strong>
+                      {exercise.sets},<strong> Reps: </strong>
+                      {exercise.reps},<strong> Weight: </strong>
+                      {exercise.weight}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
