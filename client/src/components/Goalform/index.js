@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
 import { ADD_Goal } from '../../utils/mutations';
-import { QUERY_Goal, QUERY_ME } from '../../utils/queries';
+import { QUERY_GOALS, QUERY_ME } from '../../utils/queries';
 
 import Auth from '../../utils/auth';
 
@@ -15,7 +15,7 @@ const goalForm = () => {
   const [addGoal, { error }] = useMutation(ADD_Goal, {
     update(cache, { data: { addGoal } }) {
       try {
-        const { Goals } = cache.readQuery({ query: QUERY_Goal });
+        const { Goals } = cache.readQuery({ query: QUERY_GOALS });
 
         cache.writeQuery({
           query: QUERY_Goal,
