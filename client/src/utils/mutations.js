@@ -51,3 +51,47 @@ export const ADD_WORKOUT = gql`
   }
 `;
 
+export const ADD_EXERCISE = gql`
+  mutation addExercise($workoutId: ID!, $name: String!) {
+    addExercise(workoutId: $workoutId, name: $name) {
+      _id
+      date
+      exercises {
+        name
+        sets {
+          reps
+          weight
+        }
+      }
+    }
+  }
+`;
+
+export const ADD_SET = gql`
+  mutation addSet($exerciseId: ID!, $reps: Int!, $weight: Int!) {
+    addSet(exerciseId: $exerciseId, reps: $reps, weight: $weight) {
+      _id
+      date
+      exercises {
+        name
+        sets {
+          reps
+          weight
+        }
+      }
+    }
+  }
+`;
+
+export const REMOVE_GOAL = gql`
+  mutation removeGoal($goalId: ID!) {
+    removeGoal(goalId: $goalId) {
+      _id
+      goalText
+      createdAt
+      endDate
+    }
+  }
+`;
+
+
