@@ -16,7 +16,7 @@ const SingleGoal = () => {
     variables: { goalId: goalId },
   });
 
-  const Goal = data?.Goal || {};
+  const Goal = data?.goal || {};
 
   if (loading) {
     return <div>Loading...</div>;
@@ -42,7 +42,6 @@ const SingleGoal = () => {
           {goal.goalText}
         </blockquote>
       </div>
-
 
     </div>
   );
