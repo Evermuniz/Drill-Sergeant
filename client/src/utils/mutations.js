@@ -94,4 +94,53 @@ export const REMOVE_GOAL = gql`
   }
 `;
 
+export const REMOVE_WORKOUT = gql`
+  mutation removeWorkout($workoutId: ID!) {
+    removeWorkout(workoutId: $workoutId) {
+      _id
+      date
+      exercises {
+        name
+        sets {
+          reps
+          weight
+        }
+      }
+    }
+  }
+`;
+
+export const REMOVE_EXERCISE = gql`
+  mutation removeExercise($exerciseId: ID!) {
+    removeExercise(exerciseId: $exerciseId) {
+      _id
+      date
+      exercises {
+        name
+        sets {
+          reps
+          weight
+        }
+      }
+    }
+  }
+`;
+
+export const REMOVE_SET = gql`
+  mutation removeSet($setId: ID!) {
+    removeSet(setId: $setId) {
+      _id
+      date
+      exercises {
+        name
+        sets {
+          reps
+          weight
+        }
+      }
+    }
+  }
+`;
+
+
 
