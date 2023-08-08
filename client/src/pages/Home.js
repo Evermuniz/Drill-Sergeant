@@ -2,9 +2,6 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { useQuery } from "@apollo/client";
 
-import ThoughtList from "../components/ThoughtList";
-import ThoughtForm from "../components/ThoughtForm";
-
 import { QUERY_THOUGHTS } from "../utils/queries";
 
 function Home() {

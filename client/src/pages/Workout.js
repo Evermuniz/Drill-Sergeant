@@ -7,8 +7,24 @@ const Workouts = () => {
   const [selectedType, setSelectedType] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [options, setOptions] = useState([]);
-  const [dropdownLabel, setDropdownLabel] = useState("Select");
-  const [dropdownLabel2, setDropdownLabel2] = useState("Select"); // New state variable
+  const [apiDataList, setApiDataList] = useState([]);
+  const [selectedExerciseOption, setSelectedExerciseOption] = useState("");
+
+  useEffect(() => {
+    const fetchApiData = async () => {
+      try {
+        const data = await makeApiCall();
+        console.log("API Data:", data);
+        setApiDataList(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (selectedOption) {
+      fetchApiData();
+    }
+  }, [selectedOption]);
 
   useEffect(() => {
     const updateOptions = () => {
@@ -31,27 +47,39 @@ const Workouts = () => {
   }, [selectedType]);
 
   const handleDropdownChange = (event) => {
-    const selectedOption = event.target.textContent.toLowerCase();
-    setSelectedType(selectedOption);
+    const selectedType = event.target.textContent.toLowerCase();
+    setSelectedType(selectedType);
     setSelectedOption("");
-    setDropdownLabel(event.target.textContent);
   };
 
   const handleOptionChange = (event) => {
     const selectedOption = event.target.textContent.toLowerCase();
     setSelectedOption(selectedOption);
-    setDropdownLabel2(event.target.textContent); // Update the label for the second dropdown
+  };
+
+  const handleExerciseOptionChange = (event) => {
+    const selectedExerciseOption = event.target.textContent;
+    setSelectedExerciseOption([selectedExerciseOption]);
   };
 
   const makeApiCall = () => {
-    fetch(`${apiURL}${selectedType}=${selectedOption}`, {
+    return fetch(`${apiURL}=${selectedOption}`, {
       headers: {
         "X-Api-Key": apiKey,
       },
     })
       .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error("Request failed:", error));
+      .then((data) => {
+        if (data && data.length > 0) {
+          return data;
+        } else {
+          return [];
+        }
+      })
+      .catch((error) => {
+        console.error("Request failed:", error);
+        return [];
+      });
   };
 
   const type = [
@@ -168,7 +196,7 @@ const Workouts = () => {
   ];
 
   return (
-     <div>
+    <div>
       <div className="dropdown">
         <button
           className="btn btn-secondary dropdown-toggle"
@@ -176,7 +204,7 @@ const Workouts = () => {
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          {dropdownLabel}
+          {selectedType ? selectedType : "Select"}
         </button>
         <ul className="dropdown-menu">
           <li>
@@ -205,9 +233,9 @@ const Workouts = () => {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            {`Select ${selectedType}`}
+            {selectedOption ? selectedOption : "Select"}
           </button>
-          <ul className="dropdown-menu">
+          <ul className="dropdown-menu options">
             {options.map((item) => (
               <li key={item.key}>
                 <a className="dropdown-item" href="#" onClick={handleOptionChange}>
@@ -216,10 +244,30 @@ const Workouts = () => {
               </li>
             ))}
           </ul>
-          <div>Selected: {dropdownLabel2}</div> 
+
+          {selectedOption && (
+            <div>
+              <button
+                className="btn btn-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {selectedExerciseOption ? selectedExerciseOption : "Select"}
+              </button>
+              <ul className="dropdown-menu exercises">
+                {apiDataList.map((exercise, index) => (
+                  <li key={index}>
+                    <a className="dropdown-item" href="#" onClick={handleExerciseOptionChange}>
+                      {exercise.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
-      {selectedOption && <button onClick={makeApiCall}>Begin Exercise</button>}
     </div>
   );
 };
