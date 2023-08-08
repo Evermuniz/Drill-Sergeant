@@ -16,6 +16,7 @@ import Profile from './pages/Profile';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Workout from "./pages/Workout";
+import '@smastrom/react-rating/style.css'
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
