@@ -24,33 +24,30 @@ export const ADD_USER = gql`
   }
 `;
 
-export const ADD_THOUGHT = gql`
-  mutation addThought($thoughtText: String!) {
-    addThought(thoughtText: $thoughtText) {
+export const ADD_GOAL = gql`
+  mutation addGoal($goalText: String!) {
+    addGoal(goalText: $goalText) {
       _id
-      thoughtText
-      thoughtAuthor
+      goalText
       createdAt
-      comments {
-        _id
-        commentText
+      endDate
+    }
+  }
+`;
+
+export const ADD_WORKOUT = gql`
+  mutation addWorkout($date: String!) {
+    addWorkout(date: $date) {
+      _id
+      date
+      exercises {
+        name
+        sets {
+          reps
+          weight
+        }
       }
     }
   }
 `;
 
-export const ADD_COMMENT = gql`
-  mutation addComment($thoughtId: ID!, $commentText: String!) {
-    addComment(thoughtId: $thoughtId, commentText: $commentText) {
-      _id
-      thoughtText
-      thoughtAuthor
-      createdAt
-      comments {
-        _id
-        commentText
-        createdAt
-      }
-    }
-  }
-`;
