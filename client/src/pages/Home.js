@@ -1,13 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { useQuery } from "@apollo/client";
 
-import { QUERY_GOALS } from "../utils/queries";
+
 
 function Home() {
-  const { loading, data } = useQuery(QUERY_GOALS);
-  const Goal = data?.Goal || [];
-
   const testimonialsData = [
     {
       name: "Hannah S.",

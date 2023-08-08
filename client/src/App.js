@@ -71,7 +71,7 @@ function App() {
                 element={<Profile />}
               />
               <Route 
-                path="/goals/:goalId"
+                path="/goal/:goalId"
                 element={<SingleGoal />}
               />
               <Route 
