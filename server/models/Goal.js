@@ -10,33 +10,16 @@ const goalSchema = new Schema({
         default: Date.now,
         get: (timestamp) => dateFormat(timestamp),
     },
-    startDate: {
-        type: Date,
-        default: Date.now,
-        get: (timestamp) => dateFormat(timestamp),
-    },
     endDate: {
         type: Date,
         default: Date.now,
         get: (timestamp) => dateFormat(timestamp),
         validate: {
             validator: function (endDate) {
-                return endDate > this.startDate;
+                return endDate > this.createdAt;
             }
         }
     },
-    comments: [
-        {
-            commentText: {
-                type: String,
-            },
-            createdAt: {
-                type: Date,
-                default: Date.now,
-                get: (timestamp) => dateFormat(timestamp),
-            },
-        },
-    ],
 });
 
 const Goal = model('Goal', goalSchema);

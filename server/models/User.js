@@ -19,13 +19,13 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
-  goal: [
+  goals: [
     { 
       type: Schema.Types.ObjectId,
       ref: 'Goal',
     },
   ],
-  workout: [
+  workouts: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Workout',
