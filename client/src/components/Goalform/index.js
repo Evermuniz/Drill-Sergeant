@@ -12,8 +12,8 @@ const goalForm = () => {
 
   const [characterCount, setCharacterCount] = useState(0);
 
-  const [addThought, { error }] = useMutation(ADD_Goal, {
-    update(cache, { data: { addThought } }) {
+  const [addGoal, { error }] = useMutation(ADD_Goal, {
+    update(cache, { data: { addGoal } }) {
       try {
         const { Goals } = cache.readQuery({ query: QUERY_Goal });
 
