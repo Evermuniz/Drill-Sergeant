@@ -6,24 +6,15 @@ const typeDefs = gql`
     username: String
     email: String
     password: String
-    goals: [Goal]
-    Exercise: [Exercise]
+    goals: [Goal]!
+    workouts: [Workout]!
   }
 
-  type Goal{
+  type Goal {
     _id: ID
     goalText: String
     createdAt: String
-    startDate: String
     endDate: String
-    comments: [Comment]
-  }
-
-  type Comment {
-    _id: ID
-    content: String
-    author: String
-    createdAt: String
   }
 
   type Quote {
@@ -31,11 +22,20 @@ const typeDefs = gql`
     quoteText: String
   }
 
+  type Set {
+    reps: Int
+    weight: Int
+  }
+
   type Exercise {
     name: String
-    type: String
-    muscle: String
-    difficulty: String
+    sets: [Set]!
+  }
+
+  type Workout {
+    _id: ID
+    date: String
+    exercises: [Exercise]!
   }
 
   type Auth {
@@ -48,7 +48,9 @@ const typeDefs = gql`
     user(username: String!): User
     goals(username: String): [Goal]
     goal(goalId: ID!): Goal
-    Exercise: [Exercise]
+    workouts(username: String): [Workout]
+    workout(workoutId: ID!): Workout
+    quotes: [Quote]
     me: User
   }
 
@@ -56,9 +58,23 @@ const typeDefs = gql`
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
     addGoal(goalText: String!): Goal
-    addExercise(name: String!, type: String!, muscle: String!, difficulty: String!): Exercise
+    addSet(reps: Int!, weight: Int!): Set
+    addExercise(name: String!, sets: [SetInput]!): Exercise
+    addWorkout(exercises: [ExerciseInput]!): Workout
     removeGoal(goalId: ID!): Goal
+    removeSet(setId: ID!): Set
     removeExercise(exerciseId: ID!): Exercise
+    removeWorkout(workoutId: ID!): Workout
+  }
+
+  input SetInput {
+    reps: Int
+    weight: Int
+  }
+
+  input ExerciseInput {
+    name: String
+    sets: [SetInput]!
   }
 `;
 

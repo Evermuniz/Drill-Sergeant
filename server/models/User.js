@@ -19,16 +19,16 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
-  goal: [
+  goals: [
     { 
       type: Schema.Types.ObjectId,
       ref: 'Goal',
     },
   ],
-  exercise: [
+  workouts: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Exercise',
+      ref: 'Workout',
     },
   ],
 });
