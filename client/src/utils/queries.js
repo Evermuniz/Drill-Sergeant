@@ -1,6 +1,6 @@
-const { gql } = require('apollo-server-express');
+import { gql } from '@apollo/client';
 
-const QUERY_USER = gql`
+export const QUERY_USER = gql`
   query user($username: String!) {
     user(username: $username) {
       _id
@@ -27,7 +27,7 @@ const QUERY_USER = gql`
   }
 `;
 
-const QUERY_GOALS = gql`
+export const QUERY_GOALS = gql`
   query goals($username: String) {
     goals(username: $username) {
       _id
@@ -38,7 +38,18 @@ const QUERY_GOALS = gql`
   }
 `;
 
-const QUERY_WORKOUTS = gql`
+export const QUERY_SINGLE_GOAL = gql`
+  query goal($goalId: ID!) {
+    goal(goalId: $goalId) {
+      _id
+      goalText
+      createdAt
+      endDate
+    }
+  }
+`;
+
+export const QUERY_WORKOUTS = gql`
   query workouts($username: String) {
     workouts(username: $username) {
       _id
@@ -54,7 +65,7 @@ const QUERY_WORKOUTS = gql`
   }
 `;
 
-const QUERY_QUOTES = gql`
+export const QUERY_QUOTES = gql`
   query quotes {
     quotes {
       _id
@@ -63,7 +74,7 @@ const QUERY_QUOTES = gql`
   }
 `;
 
-const QUERY_ME = gql`
+export const QUERY_ME = gql`
   query me {
     me {
       _id
@@ -89,11 +100,3 @@ const QUERY_ME = gql`
     }
   }
 `;
-
-module.exports = {
-  QUERY_USER,
-  QUERY_GOALS,
-  QUERY_WORKOUTS,
-  QUERY_QUOTES,
-  QUERY_ME,
-};
