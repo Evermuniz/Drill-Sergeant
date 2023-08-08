@@ -1,60 +1,99 @@
-import { gql } from '@apollo/client';
+const { gql } = require('apollo-server-express');
 
-export const QUERY_USER = gql`
+const QUERY_USER = gql`
   query user($username: String!) {
     user(username: $username) {
       _id
       username
       email
-      thoughts {
+      goals {
         _id
-        thoughtText
+        goalText
         createdAt
+        endDate
+      }
+      workouts {
+        _id
+        date
+        exercises {
+          name
+          sets {
+            reps
+            weight
+          }
+        }
       }
     }
   }
 `;
 
-export const QUERY_THOUGHTS = gql`
-  query getThoughts {
-    thoughts {
+const QUERY_GOALS = gql`
+  query goals($username: String) {
+    goals(username: $username) {
       _id
-      thoughtText
-      thoughtAuthor
+      goalText
       createdAt
+      endDate
     }
   }
 `;
 
-export const QUERY_SINGLE_THOUGHT = gql`
-  query getSingleThought($thoughtId: ID!) {
-    thought(thoughtId: $thoughtId) {
+const QUERY_WORKOUTS = gql`
+  query workouts($username: String) {
+    workouts(username: $username) {
       _id
-      thoughtText
-      thoughtAuthor
-      createdAt
-      comments {
-        _id
-        commentText
-        commentAuthor
-        createdAt
+      date
+      exercises {
+        name
+        sets {
+          reps
+          weight
+        }
       }
     }
   }
 `;
 
-export const QUERY_ME = gql`
+const QUERY_QUOTES = gql`
+  query quotes {
+    quotes {
+      _id
+      quoteText
+    }
+  }
+`;
+
+const QUERY_ME = gql`
   query me {
     me {
       _id
       username
       email
-      thoughts {
+      goals {
         _id
-        thoughtText
-        thoughtAuthor
+        goalText
         createdAt
+        endDate
+      }
+      workouts {
+        _id
+        date
+        exercises {
+          name
+          sets {
+            reps
+            weight
+          }
+        }
       }
     }
   }
 `;
+
+module.exports = {
+  QUERY_USER,
+  QUERY_GOALS,
+  QUERY_WORKOUTS,
+  QUERY_QUOTES,
+  QUERY_ME,
+};
