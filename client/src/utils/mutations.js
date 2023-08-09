@@ -36,8 +36,8 @@ export const ADD_GOAL = gql`
 `;
 
 export const ADD_WORKOUT = gql`
-  mutation addWorkout($date: String!) {
-    addWorkout(date: $date) {
+  mutation addWorkout($exercises: [ExerciseInput]!) {
+    addWorkout(exercises: $exercises) {
       _id
       date
       exercises {
@@ -52,8 +52,8 @@ export const ADD_WORKOUT = gql`
 `;
 
 export const ADD_EXERCISE = gql`
-  mutation addExercise($workoutId: ID!, $name: String!) {
-    addExercise(workoutId: $workoutId, name: $name) {
+  mutation addExercise($name: String!, $sets: [SetInput]!, $workoutId: ID!) {
+    addExercise(name: $name, sets: $sets, workoutId: $workoutId) {
       _id
       date
       exercises {
@@ -68,8 +68,8 @@ export const ADD_EXERCISE = gql`
 `;
 
 export const ADD_SET = gql`
-  mutation addSet($exerciseId: ID!, $reps: Int!, $weight: Int!) {
-    addSet(exerciseId: $exerciseId, reps: $reps, weight: $weight) {
+  mutation addSet($reps: Int!, $weight: Int!, $exerciseId: ID!) {
+    addSet(reps: $reps, weight: $weight, exerciseId: $exerciseId) {
       _id
       date
       exercises {
@@ -111,8 +111,8 @@ export const REMOVE_WORKOUT = gql`
 `;
 
 export const REMOVE_EXERCISE = gql`
-  mutation removeExercise($exerciseId: ID!) {
-    removeExercise(exerciseId: $exerciseId) {
+  mutation removeExercise($exerciseId: ID! , $workoutId: ID!) {
+    removeExercise(exerciseId: $exerciseId, workoutId: $workoutId) {
       _id
       date
       exercises {
@@ -127,8 +127,8 @@ export const REMOVE_EXERCISE = gql`
 `;
 
 export const REMOVE_SET = gql`
-  mutation removeSet($setId: ID!) {
-    removeSet(setId: $setId) {
+  mutation removeSet($setId: ID! , $exerciseId: ID!) {
+    removeSet(setId: $setId, exerciseId: $exerciseId) {
       _id
       date
       exercises {
