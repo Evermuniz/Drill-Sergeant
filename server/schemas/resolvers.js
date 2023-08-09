@@ -109,21 +109,18 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
-    addSet : async (parent, { reps, weight, exerciseId, workoutId }, context) => {
+    addSet : async (parent, { exerciseId , set }, context) => {
       if (context.user) {
-        const set = {
-          reps,
-          weight,
-        };
+        const { reps, weight } = set;
 
-        const exercise = Workout.exercises.findOne ({ _id: exerciseId});
+        const workout = await Workout.findOne ({ _id: exerciseId});
         
-        if (!exercise) {
-          throw new Error ('No exercise found!');
+        if (!workout) {
+          throw new Error ('No workout found!');
         }
-        Workout.exercises.push({ sets});
-        await exercise.save();
-        return exercise;
+        workout.exercises.push({ reps, weight});
+        await workout.save();
+        return workout;
       }
       throw new AuthenticationError('You need to be logged in!');
     },

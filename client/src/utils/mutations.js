@@ -67,22 +67,6 @@ export const ADD_WORKOUT = gql`
   }
 `;
 
-export const ADD_SET = gql`
-  mutation addSet($reps: Int!, $weight: Int!, $exerciseId: ID!) {
-    addSet(reps: $reps, weight: $weight, exerciseId: $exerciseId) {
-      _id
-      date
-      exercises {
-        name
-        sets {
-          reps
-          weight
-        }
-      }
-    }
-  }
-`;
-
 export const REMOVE_GOAL = gql`
   mutation removeGoal($goalId: ID!) {
     removeGoal(goalId: $goalId) {
@@ -110,37 +94,7 @@ export const REMOVE_WORKOUT = gql`
   }
 `;
 
-export const REMOVE_EXERCISE = gql`
-  mutation removeExercise($exerciseId: ID! , $workoutId: ID!) {
-    removeExercise(exerciseId: $exerciseId, workoutId: $workoutId) {
-      _id
-      date
-      exercises {
-        name
-        sets {
-          reps
-          weight
-        }
-      }
-    }
-  }
-`;
 
-export const REMOVE_SET = gql`
-  mutation removeSet($setId: ID! , $exerciseId: ID!) {
-    removeSet(setId: $setId, exerciseId: $exerciseId) {
-      _id
-      date
-      exercises {
-        name
-        sets {
-          reps
-          weight
-        }
-      }
-    }
-  }
-`;
 
 
 
