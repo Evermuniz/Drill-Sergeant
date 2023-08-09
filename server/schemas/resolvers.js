@@ -58,10 +58,11 @@ const resolvers = {
 
       return { token, user };
     },
-    addGoal: async (parent, { goalText }, context) => {
+    addGoal: async (parent, { goalText, endDate }, context) => {
       if (context.user) {
         const goal = await Goal.create({
           goalText,
+          endDate,
         });
 
         await User.findOneAndUpdate(

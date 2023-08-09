@@ -1,50 +1,12 @@
 import React from 'react';
+import GoalForm from '../components/GoalForm';
 
-
-import { useParams } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-
-
-import { QUERY_SINGLE_GOAL } from '../utils/queries';
-
-const SingleGoal = () => {
-
-  const { goalId } = useParams();
-
-  const { loading, data } = useQuery(QUERY_SINGLE_GOAL, {
-    
-    variables: { goalId: goalId },
-  });
-
-  const Goal = data?.Goal || {};
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+const GoalPage = () => {
   return (
-    <div className="my-3">
-      <h3 className="card-header bg-dark text-light p-2 m-0">
-        <span style={{ fontSize: '1rem' }}>
-          Workout Goal! {Goal.createdAt}
-        </span>
-      </h3>
-      <div className="bg-light py-4">
-        <blockquote
-          className="p-4"
-          style={{
-            fontSize: '1.5rem',
-            fontStyle: 'italic',
-            border: '2px dotted #1a1a1a',
-            lineHeight: '1.5',
-          }}
-        >
-          {Goal.GoalText}
-        </blockquote>
-      </div>
-
-
+    <div>
+      <GoalForm />
     </div>
   );
 };
 
-export default SingleGoal;
+export default GoalPage;

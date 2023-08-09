@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { Link } from "react-router-dom";
 
 
 
@@ -57,6 +58,10 @@ useEffect(() => {
       <div className="flex-row justify-center animation-container">
         {" "}
         <div className="landingPageText animation-container" ref={animationContainerRef}>
+          <div>
+            <Link to="/workout" className="btn btn-lg btn-info m-2"> Start Workout </Link>
+            <Link to="/goal" className="btn btn-lg btn-info m-2"> Make a Goal </Link>
+          </div>
           <h1 className="text-center card-title">About Us:</h1>{" "}
           <p className="text-center">
             Welcome to Drill Sergeant Fitness, where tough love meets humor for epic gains! Our app is all about pushing

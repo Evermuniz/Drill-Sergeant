@@ -1,68 +1,68 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-
-import { ADD_Goal } from '../../utils/mutations';
+import { useMutation, useQuery } from '@apollo/client';
+import { ADD_GOAL } from '../../utils/mutations';
 import { QUERY_GOALS, QUERY_ME } from '../../utils/queries';
-
 import Auth from '../../utils/auth';
+import { Link } from 'react-router-dom';
 
-const goalForm = () => {
-  const [GoalText, setGoalText] = useState('');
-
+const GoalForm = () => {
+  const [goalText, setGoalText] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [characterCount, setCharacterCount] = useState(0);
+  const goals = useQuery( QUERY_GOALS);
+  const me = useQuery( QUERY_ME);
 
-  const [addGoal, { error }] = useMutation(ADD_Goal, {
+  const [addGoal, { error }] = useMutation(ADD_GOAL, {
     update(cache, { data: { addGoal } }) {
       try {
-        const { Goals } = cache.readQuery({ query: QUERY_GOALS });
-
+        console.log(goals);
         cache.writeQuery({
-          query: QUERY_Goal,
-          data: { goal: [addGoal, ...Goals] },
+          query: QUERY_GOALS,
+          data: { goals: [addGoal, ...goals.data.goals] }
         });
       } catch (e) {
         console.error(e);
       }
 
-      // update me object's cache
-      const { me } = cache.readQuery({ query: QUERY_ME });
+      console.log(me);
       cache.writeQuery({
         query: QUERY_ME,
-        data: { me: { ...me, thoughts: [...me.Goal, addGoal] } },
+        data: { me: { ...me, goals: [...me.data.me.goals, addGoal] } }
       });
-    },
+    }
   });
 
-  const handleFormSubmit = async (event) => {
+  const handleChange = event => {
+    if (event.target.value.length <= 280) {
+      setGoalText(event.target.value);
+      setCharacterCount(event.target.value.length);
+    }
+  }
+
+  const handleEndDateChange = event => {
+    setEndDate(event.target.value);
+  }
+
+  const handleFormSubmit = async event => {
     event.preventDefault();
 
     try {
-      const { data } = await addGoal({
-        variables: {
-          thoughtText,
-          thoughtAuthor: Auth.getProfile().data.username,
-        },
+      console.log(typeof ( endDate));
+      await addGoal({
+        variables: { goalText: goalText, endDate: endDate }
       });
 
-      setThoughtText('');
-    } catch (err) {
-      console.error(err);
+      setGoalText('');
+      setCharacterCount(0);
+      setEndDate('');
+    } catch (e) {
+      console.error(e);
     }
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    if (name === 'thoughtText' && value.length <= 280) {
-      setGoalText(value);
-      setCharacterCount(value.length);
-    }
-  };
+  }
 
   return (
     <div>
-      <h3>What is your Workour Goal!</h3>
+      <h3>What is your Workout Goal!</h3>
 
       {Auth.loggedIn() ? (
         <>
@@ -79,13 +79,27 @@ const goalForm = () => {
           >
             <div className="col-12 col-lg-9">
               <textarea
-                name="GoalText"
+                name="goalText"
                 placeholder="Here's a new goal..."
-                value={GoalText}
+                value={goalText}
                 className="form-input w-100"
                 style={{ lineHeight: '1.5', resize: 'vertical' }}
                 onChange={handleChange}
               ></textarea>
+            </div>
+
+            <div className="col-12 col-lg-9">
+              <label htmlFor="endDate">End Date:</label>
+              <input
+                type="date"
+                id="endDate"
+                name="endDate"
+                value={endDate}
+                onChange={handleEndDateChange}
+              />
+              {new Date(endDate) <= new Date() && (
+               <p className="text-danger">End date must be after today.</p>
+              )}
             </div>
 
             <div className="col-12 col-lg-3">
