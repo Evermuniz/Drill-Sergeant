@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 
+
 const goalSchema = new Schema({
     goalText: {
         type: String,
@@ -14,14 +15,9 @@ const goalSchema = new Schema({
         get: (timestamp) => dateFormat(timestamp),
     },
     endDate: {
-        type: Date,
+        type: String,
         default: Date.now,
         get: (timestamp) => dateFormat(timestamp),
-        validate: {
-            validator: function (endDate) {
-                return endDate > this.createdAt;
-            }
-        }
     },
 });
 
