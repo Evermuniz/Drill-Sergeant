@@ -12,7 +12,7 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import SingleGoal from './pages/SingleGoal';
-import Profile from './pages/Profile';
+import Dashboard from './pages/Dashboard';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Workout from "./pages/Workout";
@@ -64,11 +64,7 @@ function App() {
               />
               <Route 
                 path="/me"
-                element={<Profile />}
-              />
-              <Route 
-                path="/profiles/:username"
-                element={<Profile />}
+                element={<Dashboard />}
               />
               <Route 
                 path="/goal"

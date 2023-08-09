@@ -30,9 +30,9 @@ const GoalPage = () => {
           <ul>
             {data.goals.map((goal) => (
               <li key={goal._id}>
-                <p>Goal Text: {goal.goalText}</p>
-                <p>Created At: {goal.createdAt}</p>
-                <p>End Date: {goal.endDate}</p>
+                <p>Goal: {goal.goalText}</p>
+                <p>Created On: {goal.createdAt}</p>
+                <p>Due Date: {goal.endDate}</p>
                 <button onClick={() => handleDelete(goal._id)}>Delete</button>
               </li>
             ))}

@@ -14,7 +14,8 @@ const Profile = () => {
   });
 
   const user = data?.me || data?.user || {};
-  // navigate to personal profile page if username is yours
+
+  // Navigate to personal profile page if username is yours
   if (Auth.loggedIn() && Auth.getProfile().data.username === userParam) {
     return <Navigate to="/me" />;
   }
@@ -36,9 +37,20 @@ const Profile = () => {
     <div>
       <div className="flex-row justify-center mb-3">
         <h2 className="col-12 col-md-10 bg-dark text-light p-3 mb-5">
-          Viewing {userParam ? `${user.username}'s` : 'your'} profile.
+          Viewing {userParam ? `${user.username}'s` : 'your'} dashboard.
         </h2>
-
+      </div>
+      <div>
+        <h3>Goals:</h3>
+        <ul>
+          {user.goals.map((goal) => (
+            <li key={goal._id}>
+              <p>Goal: {goal.goalText}</p>
+              <p>Created On: {goal.createdAt}</p>
+              <p>Due Date: {goal.endDate}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
