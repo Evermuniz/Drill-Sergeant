@@ -6,7 +6,7 @@ import { QUERY_USER, QUERY_ME } from '../utils/queries';
 
 import Auth from '../utils/auth';
 
-const Profile = () => {
+const Dashboard = () => {
   const { username: userParam } = useParams();
 
   const { loading, data } = useQuery(userParam ? QUERY_USER : QUERY_ME, {
@@ -52,8 +52,33 @@ const Profile = () => {
           ))}
         </ul>
       </div>
+      <div>
+        <h3>Previous Workouts:</h3>
+        <ul>
+          {user.workouts.map((workout) => (
+            <li key={workout._id}>
+              <p>Date: {workout.date}</p>
+              <ul>
+                {workout.exercises.map((exercise, index) => (
+                  <li key={index}>
+                    <p>Exercise: {exercise.name}</p>
+                    <ul>
+                      {exercise.sets.map((set, setIndex) => (
+                        <li key={setIndex}>
+                          <p>Reps: {set.reps}</p>
+                          <p>Weight: {set.weight}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
 
-export default Profile;
+export default Dashboard;
