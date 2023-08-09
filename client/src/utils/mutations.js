@@ -51,9 +51,9 @@ export const ADD_WORKOUT = gql`
   }
 `;
 
-export const ADD_EXERCISE = gql`
-  mutation addExercise($name: String!, $sets: [SetInput]!, $workoutId: ID!) {
-    addExercise(name: $name, sets: $sets, workoutId: $workoutId) {
+  export const ADD_EXERCISE = gql`
+  mutation addExercise($workoutId: ID!, $exercise: ExerciseInput!) {
+    addExercise(workoutId: $workoutId, exercise: $exercise) {
       _id
       date
       exercises {
