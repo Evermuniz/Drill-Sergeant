@@ -1,7 +1,7 @@
 {
-  "1": ["Poor", "Not Good", "Awful"],
-  "2": ["Basic", "Okayish", "Meh"],
-  "3": ["Average", "Okay", "So-so"],
-  "4": ["Good", "Great", "Very Good"],
-  "5": ["Excellent", "Outstanding", "Top-notch"]
+  "1": ["I've had a lot to drink and you still don't look good.", "You've got that faraway look. The farther away I get, the better you look.", "It's ok to be ugly, but aren't you overdoing it?", "Ah I understand - you fell out of the ugly tree and hit every branch on the way down."],
+  "2": ["I remember when you only had one chin.", "You may not be good at losing weight, but you seem to be pretty good at finding it.", "I feel honored to have witnessed your continual growth.", "Congratulations! What's your due date?"],
+  "3": ["I'm sick of you and your delusions of adequacy.","When I think of all the people I respect the most, you're right there, serving them drinks.", "Your mediocrity is unparalleled"],
+  "4": ["You have such a great personality", "Someone has to be below average.", "You remind of one of those people in school that no one remembers."],
+  "5": ["You know what's wrong with you? Nothing.", "How YOU doin'?", "You make me want to be a better person"]
 }
