@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Rating } from '@smastrom/react-rating';
+ import '@smastrom/react-rating/style.css'
 
 const Rate = () => {
-  const [rating, setRating] = useState(3);
-  const [hoveredRating, setHoveredRating] = useState(0);
+  const [rating, setRating] = useState();
   const [ratingsData, setRatingsData] = useState({});
 
   useEffect(() => {
@@ -28,10 +28,9 @@ const Rate = () => {
 
   return (
     <div style={{ maxWidth: 180, width: '100%' }}>
-      <Rating value={rating} onChange={setRating} onHoverChange={setHoveredRating} />
+      <Rating value={rating} onChange={setRating} />
       <div>
-        <div>{`Selected: ${getRating(rating)}`}</div>
-        <div>{`Hovered: ${getRating(hoveredRating)}`}</div>
+        <div>{` ${getRating(rating)}`}</div>
       </div>
     </div>
   );

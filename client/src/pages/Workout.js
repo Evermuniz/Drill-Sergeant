@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import RatingModal from "../components/Modal";
 
 const apiKey = "okHBdIqFHCmm+1cNKVgbkA==nQJoO9i4TaJ8a2Pn";
 const apiURL = "https://api.api-ninjas.com/v1/exercises?";
@@ -14,6 +15,7 @@ const Workouts = () => {
   const [workoutSelected, setWorkoutSelected] = useState(false);
   const [savedWorkouts, setSavedWorkouts] = useState([]);
   const [workoutInProgress, setWorkoutInProgress] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
 
   useEffect(() => {
     const fetchApiData = async () => {
@@ -90,7 +92,10 @@ const Workouts = () => {
     setSets(0);
     setReps(0);
     setWeight(0);
+    setModalShow(true);
+
   };
+
 
   const [sets, setSets] = useState(0);
   const [reps, setReps] = useState(0);
@@ -292,6 +297,12 @@ const Workouts = () => {
     <div>
       {!workoutStarted && (
         <section id="workoutSelection">
+          {modalShow && (
+            <RatingModal
+              show={modalShow}
+              onHide={() => setModalShow(false)}
+            />
+          )}
           <div className="dropdown">
             <button
               className="btn btn-secondary dropdown-toggle m-1"
