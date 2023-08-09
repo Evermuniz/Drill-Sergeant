@@ -13,6 +13,7 @@ const Workouts = () => {
   const [workoutStarted, setWorkoutStarted] = useState(false);
   const [workoutSelected, setWorkoutSelected] = useState(false);
   const [savedWorkouts, setSavedWorkouts] = useState([]);
+  const [workoutInProgress, setWorkoutInProgress] = useState(false);
 
   useEffect(() => {
     const fetchApiData = async () => {
@@ -78,6 +79,17 @@ const Workouts = () => {
   const beginWorkout = () => {
     setWorkoutStarted(true);
     setWorkoutSelected(false);
+    setWorkoutInProgress(false);
+  };
+
+  const finishWorkout = () => {
+    setWorkoutInProgress(false);
+    setSavedWorkouts([]);
+    setWorkoutStarted(false);
+    setSelectedExerciseOption("");
+    setSets(0);
+    setReps(0);
+    setWeight(0);
   };
 
   const [sets, setSets] = useState(0);
@@ -107,6 +119,13 @@ const Workouts = () => {
 
     setSavedWorkouts((prevWorkouts) => [...prevWorkouts, exerciseData]);
     setSelectedExerciseOption("");
+    setSets(0);
+    setReps(0);
+    setWeight(0);
+    setSelectedType("");
+    setSelectedOption("");
+    setApiDataList([]);
+    setWorkoutInProgress(true);
   };
 
   const ExerciseInput = ({ exerciseName }) => {
@@ -115,15 +134,15 @@ const Workouts = () => {
         <h2 className="mt-5">{exerciseName}</h2>
         <div>
           <label>Sets: </label>
-          <input type="number" value={sets} onChange={(e) => setSets(e.target.value)} />
+          <input type="number" value={sets} onChange={handleSetsChange} min={0} />
         </div>
         <div>
           <label>Reps: </label>
-          <input type="number" value={reps} onChange={(e) => setReps(e.target.value)} />
+          <input type="number" value={reps} onChange={handleRepsChange} min={0} />
         </div>
         <div>
           <label>Weight: </label>
-          <input type="number" value={weight} onChange={(e) => setWeight(e.target.value)} />
+          <input type="number" value={weight} onChange={handleWeightChange} min={0} />
         </div>
         <div>
           <button className="btn btn-primary" onClick={saveExercise}>
@@ -354,14 +373,7 @@ const Workouts = () => {
             </div>
           )}
           <div>
-            {workoutStarted && (
-              <div>
-                {workoutStarted && selectedExerciseOption && <ExerciseInput exerciseName={selectedExerciseOption} />}
-              </div>
-            )}
-          </div>
-          <div>
-         
+            {workoutInProgress && (
               <div className="exerciseContainer">
                 <h2>Workout in Progress</h2>
                 <ul>
@@ -375,7 +387,21 @@ const Workouts = () => {
                     </li>
                   ))}
                 </ul>
+                <div>
+                  <button className="btn btn-primary" onClick={finishWorkout}>
+                    Finish Workout
+                  </button>
+                </div>
               </div>
+            )}
+          </div>
+
+          <div>
+            {workoutStarted && (
+              <div>
+                {workoutStarted && selectedExerciseOption && <ExerciseInput exerciseName={selectedExerciseOption} />}
+              </div>
+            )}
           </div>
         </div>
       </div>
