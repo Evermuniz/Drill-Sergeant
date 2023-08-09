@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import Auth from '../../utils/auth';
 
 const Header = () => {
@@ -8,38 +7,72 @@ const Header = () => {
     event.preventDefault();
     Auth.logout();
   };
+
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
-    <header className="bg-primary text-light mb-4 py-3 flex-row align-center">
-      <div className="container flex-row justify-space-between-lg justify-center align-center">
-        <div>
-          <Link className="text-light" to="/">
-            <h1 className="m-0">Drill Sergeant</h1>
-          </Link>
-          <p className="m-0">Get In Shape... The Hard Way</p>
-        </div>
-        <div>
+    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+      <div className="container-fluid">
+        <Link className="navbar-brand" to="/">
+          Drill Sergeant
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          onClick={toggleMenu}
+        >
+          <span className={`navbar-toggler-icon ${menuOpen ? 'open' : ''}`}></span>
+        </button>
+        <div className={`collapse navbar-collapse ${menuOpen ? 'show' : ''}`} id="navbarNav">
           {Auth.loggedIn() ? (
-            <>
-              <Link className="btn btn-lg btn-info m-2" to="/me">
-                {Auth.getProfile().data.username}'s Dashboard
-              </Link>
-              <button className="btn btn-lg btn-light m-2" onClick={logout}>
-                Logout
-              </button>
-            </>
+            <ul className="navbar-nav ms-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/me">
+                  {Auth.getProfile().data.username}'s Dashboard
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/workout">
+                  Start Workout
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/goal">
+                  Make a Goal
+                </Link>
+              </li>
+              <li className="nav-item">
+                <button className="nav-link btn btn-link" onClick={logout}>
+                  Logout
+                </button>
+              </li>
+            </ul>
           ) : (
-            <>
-              <Link className="btn btn-lg btn-info m-2" to="/login">
-                Login
-              </Link>
-              <Link className="btn btn-lg btn-light m-2" to="/signup">
-                Signup
-              </Link>
-            </>
+            <ul className="navbar-nav ms-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/login">
+                  Login
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/signup">
+                  Signup
+                </Link>
+              </li>
+            </ul>
           )}
         </div>
       </div>
-    </header>
+    </nav>
   );
 };
 
