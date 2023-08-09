@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Goal, Quote, Workout, SetSchema, exerciseSchema, Exercise } = require('../models');
+const { User, Goal, Quote, Workout, SetSchema, exerciseSchema, } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -91,38 +91,41 @@ const resolvers = {
     }, 
     addExercise: async (parent, { name, sets, workoutId}, context) => {
       if (context.user) {
-        const exercise = await exerciseSchema.create({
-          name,
-          sets,
-        });
-
+      const exercise = {
+        name,
+        sets,
+      };
+      
         const workout = await Workout.findOne ({ _id: workoutId});
 
         if (!workout) {
           throw new Error ('No workout found!');
         }
 
-        workout.exercises.push(exercise);
+        workout.exercises.push({ name, sets});
         await workout.save();
-        return exercise;
+        console.log(workout);
+        return workout;
+        
+         
       }
       throw new AuthenticationError('You need to be logged in!');
     },
-    addSet : async (parent, { reps, weight, exerciseId }, context) => {
+    addSet : async (parent, { reps, weight, exerciseId, workoutId }, context) => {
       if (context.user) {
-        const set = await SetSchema.create({
+        const set = {
           reps,
           weight,
-        });
+        };
 
-       const exercise = await Exercise.findOne ({ _id: exerciseId});
+        const exercise = Workout.exercises.findOne ({ _id: exerciseId});
         
-       if (!exercise) {
-         throw new Error ('No exercise found!');
-       }
-       exercise.sets.push(set);
+        if (!exercise) {
+          throw new Error ('No exercise found!');
+        }
+        Workout.exercises.push({ sets});
         await exercise.save();
-        return set;
+        return exercise;
       }
       throw new AuthenticationError('You need to be logged in!');
     },
