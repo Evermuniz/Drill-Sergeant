@@ -30,5 +30,9 @@ const workoutSchema = new Schema({
 });
 
 const Workout = model('Workout', workoutSchema);
+const Exercise = model('Exercise', exerciseSchema);
+const Set = model('Set', SetSchema);
 
 module.exports = Workout;
+module.exports = Exercise;
+module.exports = Set;

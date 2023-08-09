@@ -74,38 +74,6 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
-    addSet : async (parent, { reps, weight}, context) => {
-      if (context.user) {
-        const set = await SetSchema.create({
-          reps,
-          weight,
-        });
-
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $addToSet: { sets: set._id } }
-        );
-
-        return set;
-      }
-      throw new AuthenticationError('You need to be logged in!');
-    },
-    addExercise: async (parent, { name, sets}, context) => {
-      if (context.user) {
-        const exercise = await exerciseSchema.create({
-          name,
-          sets,
-        });
-
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $addToSet: { exercises: exercise._id } }
-        );
-
-        return exercise;
-      }
-      throw new AuthenticationError('You need to be logged in!');
-    },
     addWorkout: async (parent, { exercises }, context) => {
       if (context.user) {
         const workout = await Workout.create({
@@ -114,13 +82,50 @@ const resolvers = {
 
         await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { workouts: workout._id } }
+          { $addToSet: { workouts: workout._id, } }
         );
 
         return workout;
       }
       throw new AuthenticationError('You need to be logged in!');
     }, 
+    addExercise: async (parent, { name, sets, workoutId}, context) => {
+      if (context.user) {
+        const exercise = await Exercise.create({
+          name,
+          sets,
+        });
+
+        const workout = await Workout.findOne ({ _id: workoutId});
+
+        if (!workout) {
+          throw new Error ('No workout found!');
+        }
+
+        workout.exercises.push(exercise);
+        await workout.save();
+        return exercise;
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    },
+    addSet : async (parent, { reps, weight, exerciseId }, context) => {
+      if (context.user) {
+        const set = await Set.create({
+          reps,
+          weight,
+        });
+
+       const exercise = await Exercise.findOne ({ _id: exerciseId});
+        
+       if (!exercise) {
+         throw new Error ('No exercise found!');
+       }
+       exercise.sets.push(set);
+        await exercise.save();
+        return set;
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    },
     removeGoal: async (parent, { goalId }, context) => {
       if (context.user) {
         const goal = await Goal.findOneAndDelete({
@@ -136,36 +141,6 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
-    removeSet : async (parent, { setId }, context) => {
-      if (context.user) {
-        const set = await SetSchema.findOneAndDelete({
-          _id: setId,
-        });
-
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { sets: set._id } }
-        );
-
-        return set;
-      }
-      throw new AuthenticationError('You need to be logged in!');
-    },
-    removeExercise: async (parent, { exerciseId }, context) => {
-      if (context.user) {
-        const exercise = await exerciseSchema.findOneAndDelete({
-          _id: exerciseId,
-        });
-
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { exercises: exercise._id } }
-        );
-
-        return exercise;
-      }
-      throw new AuthenticationError('You need to be logged in!');
-    },
     removeWorkout: async (parent, { workoutId }, context) => {
       if (context.user) {
         const workout = await Workout.findOneAndDelete({
@@ -178,6 +153,36 @@ const resolvers = {
         );
 
         return workout;
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    },
+    removeExercise: async (parent, { exerciseId, workoutId }, context) => {
+      if (context.user) {
+        const workout = await Workout.findOneAndDelete(
+          { _id: workoutId },
+          { $pull: { exercises: exerciseId } }
+        );
+
+        if (!workout) {
+          throw new Error ('No workout found!');
+        }
+
+        return workout;
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    },
+    removeSet : async (parent, { setId, exerciseId}, context) => {
+      if (context.user) {
+        const exercise = await Exercise.findOneAndUpdate(
+          { _id: exerciseId },
+          { $pull: { sets: setId } }
+        );
+
+        if (!exercise) {
+          throw new Error ('No exercise found!');
+        }
+
+        return exercise;
       }
       throw new AuthenticationError('You need to be logged in!');
     },
