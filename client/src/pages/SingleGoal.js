@@ -1,5 +1,5 @@
 import React from 'react';
-import GoalForm from '../components/GoalForm';
+import GoalForm from '../components/Goalform';
 
 const GoalPage = () => {
   return (
