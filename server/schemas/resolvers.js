@@ -109,24 +109,6 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
-    addSet : async (parent, { reps, weight, exerciseId, workoutId }, context) => {
-      if (context.user) {
-        const set = {
-          reps,
-          weight,
-        };
-
-        const exercise = Workout.exercises.findOne ({ _id: exerciseId});
-        
-        if (!exercise) {
-          throw new Error ('No exercise found!');
-        }
-        Workout.exercises.push({ sets});
-        await exercise.save();
-        return exercise;
-      }
-      throw new AuthenticationError('You need to be logged in!');
-    },
     removeGoal: async (parent, { goalId }, context) => {
       if (context.user) {
         const goal = await Goal.findOneAndDelete({
@@ -154,36 +136,6 @@ const resolvers = {
         );
 
         return workout;
-      }
-      throw new AuthenticationError('You need to be logged in!');
-    },
-    removeExercise: async (parent, { exerciseId, workoutId }, context) => {
-      if (context.user) {
-        const workout = await Workout.findOneAndDelete(
-          { _id: workoutId },
-          { $pull: { exercises: exerciseId } }
-        );
-
-        if (!workout) {
-          throw new Error ('No workout found!');
-        }
-
-        return workout;
-      }
-      throw new AuthenticationError('You need to be logged in!');
-    },
-    removeSet : async (parent, { setId, exerciseId}, context) => {
-      if (context.user) {
-        const exercise = await Exercise.findOneAndUpdate(
-          { _id: exerciseId },
-          { $pull: { sets: setId } }
-        );
-
-        if (!exercise) {
-          throw new Error ('No exercise found!');
-        }
-
-        return exercise;
       }
       throw new AuthenticationError('You need to be logged in!');
     },
