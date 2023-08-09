@@ -91,7 +91,7 @@ const resolvers = {
     }, 
     addExercise: async (parent, { name, sets, workoutId}, context) => {
       if (context.user) {
-        const exercise = await Exercise.create({
+        const exercise = await exerciseSchema.create({
           name,
           sets,
         });
@@ -110,7 +110,7 @@ const resolvers = {
     },
     addSet : async (parent, { reps, weight, exerciseId }, context) => {
       if (context.user) {
-        const set = await Set.create({
+        const set = await SetSchema.create({
           reps,
           weight,
         });
