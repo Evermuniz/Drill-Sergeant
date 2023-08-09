@@ -89,12 +89,10 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     }, 
-    addExercise: async (parent, { name, sets, workoutId}, context) => {
+    addExercise: async (parent, { workoutId , exercise }, context) => {
       if (context.user) {
-      const exercise = {
-        name,
-        sets,
-      };
+        // i need to grab the workout id and push the exercise to the workout and need the name and sets to hold the data
+        const { name, sets } = exercise;
       
         const workout = await Workout.findOne ({ _id: workoutId});
 
