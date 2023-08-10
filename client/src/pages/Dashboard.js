@@ -1,9 +1,9 @@
-import React from 'react';
-import { Navigate, useParams } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import React from "react";
+import { Navigate, useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 
-import { QUERY_USER, QUERY_ME } from '../utils/queries';
-import Auth from '../utils/auth';
+import { QUERY_USER, QUERY_ME } from "../utils/queries";
+import Auth from "../utils/auth";
 
 const SetDetails = ({ set }) => (
   <li>
@@ -41,47 +41,42 @@ const Dashboard = () => {
   }
 
   if (!user?.username) {
-    return (
-      <h4>
-        You need to be logged in to see this. Use the navigation links above to
-        sign up or log in!
-      </h4>
-    );
+    return <h4>You need to be logged in to see this. Use the navigation links above to sign up or log in!</h4>;
   }
 
   return (
-    <div>
+    <div className="notHome">
       <div className="flex-row justify-center mb-3">
         <h2 className="col-12 col-md-10 bg-dark text-light p-3 mb-5">
-          Viewing {userParam ? `${user.username}'s` : 'your'} dashboard.
+          Viewing {userParam ? `${user.username}'s` : "your"} dashboard.
         </h2>
       </div>
-      <div>
-        <h3>Goals:</h3>
-        <ul>
+      <div className="card mb-3">
+        <h3 className="text-center">Goals:</h3>
+        
           {user.goals.map((goal) => (
-            <li key={goal._id}>
-              <p>Goal: {goal.goalText}</p>
+            <div className="card p-2 mb-3" key={goal._id}>
+              <p className="card-title">Goal: {goal.goalText}</p>
               <p>Created On: {goal.createdAt}</p>
               <p>Due Date: {goal.endDate}</p>
-            </li>
+            </div>
           ))}
-        </ul>
+       
       </div>
-      <div>
-        <h3>Previous Workouts:</h3>
-        <ul>
+      <div className="card p-2">
+        <h3 className="text-center">Previous Workouts:</h3>
+        <div>
           {user.workouts.map((workout) => (
-            <li key={workout._id}>
-              <p>Date: {workout.date}</p>
+            <div className="card p-2 mb-3" key={workout._id}>
+              <p className="card-title">Date: {workout.date}</p>
               <ul>
                 {workout.exercises.map((exercise, index) => (
                   <ExerciseDetails key={index} exercise={exercise} />
                 ))}
               </ul>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
