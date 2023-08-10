@@ -1,8 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Link } from "react-router-dom";
-
-
 
 function Home() {
   const testimonialsData = [
@@ -26,7 +23,7 @@ function Home() {
   const testimonialsList = testimonialsData.map((testimonialsData, index) => (
     <div key={index} className="card mb-3 testimonials">
       <div className="card-body">
-        <blockquote className="blockquote mb-0">
+        <blockquote className="blockquote">
           <p>"{testimonialsData.body}"</p>
           <footer className="blockquote-footer">{testimonialsData.name}</footer>
         </blockquote>
@@ -34,30 +31,26 @@ function Home() {
     </div>
   ));
 
-const animationContainerRef = useRef();
+  const home = useRef();
 
-useEffect(() => {
-  const animationContainer = animationContainerRef.current;
 
-  let ctx = gsap.context(() => {
-    gsap.to(".animation-container", {
-      y: -500,
+  useEffect(() => {
+    gsap.to(".box", {
+      y: -100,
       delay: 1,
       duration: 2,
       opacity: 1,
       fill: "#000000",
       immediateRender: false,
     });
-  }, animationContainer);
+  }, []);
 
-  return () => ctx.revert();
-}, []);
   return (
     <main className="home">
       {" "}
-      <div className="flex-row justify-center animation-container">
+      <div className="flex-row justify-center box">
         {" "}
-        <div className="landingPageText animation-container" ref={animationContainerRef}>
+        <div className="landingPageText">
           <h1 className="text-center card-title">About Us:</h1>{" "}
           <p className="text-center">
             Welcome to Drill Sergeant Fitness, where tough love meets humor for epic gains! Our app is all about pushing
@@ -69,10 +62,9 @@ useEffect(() => {
           </p>{" "}
         </div>{" "}
         <div>
-          <h2 className="text-center">Testimonials</h2> {testimonialsList}
+          <h2 className="text-center card">Testimonials</h2> {testimonialsList}
         </div>{" "}
       </div>
-      <div></div>{" "}
     </main>
   );
 }
