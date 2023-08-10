@@ -126,11 +126,7 @@ const resolvers = {
     },
     removeWorkout: async (parent, { workoutId }, context) => {
       if (context.user) {
-        const workout = await Workout.findOne({ _id: workoutId });
-    
-        if (!workout) {
-          throw new Error('No workout found!');
-        }
+        const workout = await Workout.findOneAndDelete({ _id: workoutId });
     
         // Remove the workout from the user's workouts array
         await User.findOneAndUpdate(
@@ -138,10 +134,7 @@ const resolvers = {
           { $pull: { workouts: workout._id } }
         );
     
-        // Delete the workout document
-        await Workout.deleteOne({ _id: workoutId });
-    
-        return workoutId; // Return the ID of the deleted workout
+        return workout;
       }
       throw new AuthenticationError('You need to be logged in!');
     },
