@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import RatingModal from "../components/Modal";
+import { useMutation } from "@apollo/client";
+import { ADD_WORKOUT } from "../utils/mutations";
+import { QUERY_ME } from "../utils/queries";
 
 const apiKey = "okHBdIqFHCmm+1cNKVgbkA==nQJoO9i4TaJ8a2Pn";
 const apiURL = "https://api.api-ninjas.com/v1/exercises?";
@@ -84,7 +87,83 @@ const Workouts = () => {
     setWorkoutInProgress(false);
   };
 
-  const finishWorkout = () => {
+  const [addWorkout] = useMutation(ADD_WORKOUT, {
+    update(cache, { data }) {
+      const existingUserData = cache.readQuery({ query: QUERY_ME });
+  
+      // Create the new workout object
+      const newWorkout = {
+        date: new Date().toISOString(),
+        exercises: savedWorkouts.map(exercise => ({
+          name: exercise.exerciseName,
+          sets: [{ reps, weight }], // Assuming you save only one set here
+        })),
+      };
+  
+      const formattedExercises = savedWorkouts.map(exercise => ({
+        name: exercise.exerciseName,
+        sets: [{ reps: exercise.reps, weight: exercise.weight }],
+      }));
+  
+      const updatedUserData = {
+        ...existingUserData.me,
+        workouts: [...existingUserData.me.workouts, newWorkout],
+      };
+  
+      cache.writeQuery({
+        query: QUERY_ME,
+        data: { me: updatedUserData },
+      });
+    }
+  });
+  
+  const saveWorkoutToDatabase = async () => {
+    try {
+      // Convert reps and weight to integers
+      const formattedExercises = savedWorkouts.map(exercise => ({
+        name: exercise.exerciseName,
+        sets: exercise.sets.map(set => ({
+          reps: parseInt(set.reps, 10), // Convert to integer
+          weight: parseInt(set.weight, 10), // Convert to integer
+        })),
+      }));
+  
+      const { data, errors } = await addWorkout({
+        variables: {
+          exercises: formattedExercises,
+        },
+        update(cache, { data }) {
+          try {
+            const existingUserData = cache.readQuery({ query: QUERY_ME });
+            const newWorkout = {
+              date: new Date().toISOString(),
+              exercises: formattedExercises,
+            };
+            const updatedUserData = {
+              ...existingUserData.me,
+              workouts: [...existingUserData.me.workouts, newWorkout],
+            };
+            cache.writeQuery({
+              query: QUERY_ME,
+              data: { me: updatedUserData },
+            });
+          } catch (error) {
+            console.error('Error updating cache:', error);
+          }
+        },
+      });
+  
+      console.log('Workout saved:', data);
+      console.log('Workout has been saved to the database.');
+    } catch (error) {
+      console.error('Error saving workout:', error);
+    }
+  };
+  
+  
+  
+
+  const finishWorkout = async () => {
     setWorkoutInProgress(false);
     setSavedWorkouts([]);
     setWorkoutStarted(false);
@@ -94,7 +173,16 @@ const Workouts = () => {
     setWeight(0);
     setModalShow(true);
 
+    await saveWorkoutToDatabase();
   };
+
+
+  const exerciseArray = savedWorkouts.map((exercise) => ({
+    name:exercise.exerciseName,
+    sets: exercise.sets,
+    reps: exercise.reps,
+    weight: exercise.weight,
+  }));
 
 
   const [sets, setSets] = useState(0);
@@ -117,7 +205,7 @@ const Workouts = () => {
     setWorkoutStarted(false);
     const exerciseData = {
       exerciseName: selectedExerciseOption,
-      sets: sets,
+      sets: [{ reps, weight }],
       reps: reps,
       weight: weight,
     };
@@ -131,6 +219,7 @@ const Workouts = () => {
     setSelectedOption("");
     setApiDataList([]);
     setWorkoutInProgress(true);
+    
   };
 
   const ExerciseInput = ({ exerciseName }) => {
@@ -387,17 +476,23 @@ const Workouts = () => {
             {workoutInProgress && (
               <div className="exerciseContainer">
                 <h2>Workout in Progress</h2>
-                <ul>
-                  {savedWorkouts.map((exercise, index) => (
-                    <li key={index}>
-                      <strong>Exercise: </strong>
-                      {exercise.exerciseName},<strong> Sets: </strong>
-                      {exercise.sets},<strong> Reps: </strong>
-                      {exercise.reps},<strong> Weight: </strong>
-                      {exercise.weight}
-                    </li>
-                  ))}
-                </ul>
+                  <ul>
+                    {exerciseArray.map((exercise, index) => (
+                      <li key={index}>
+                        <strong>Exercise: </strong>
+                        {exercise.name},
+                       <ul>
+                          {exercise.sets.map((set, setIndex) => (
+                             <li key={setIndex}>
+                                <strong>Set: </strong>
+                                Reps: {set.reps}, Weight: {set.weight}
+                             </li>
+                           ))}
+                         </ul>
+                       </li>
+                       ))}
+                    </ul>
+
                 <div>
                   <button className="btn btn-primary" onClick={finishWorkout}>
                     Finish Workout

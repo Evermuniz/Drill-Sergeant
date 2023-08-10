@@ -3,8 +3,25 @@ import { Navigate, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { QUERY_USER, QUERY_ME } from '../utils/queries';
-
 import Auth from '../utils/auth';
+
+const SetDetails = ({ set }) => (
+  <li>
+    <p>Reps: {set.reps}</p>
+    <p>Weight: {set.weight}</p>
+  </li>
+);
+
+const ExerciseDetails = ({ exercise }) => (
+  <li>
+    <p>Exercise: {exercise.name}</p>
+    <ul>
+      {exercise.sets.map((set, setIndex) => (
+        <SetDetails key={setIndex} set={set} />
+      ))}
+    </ul>
+  </li>
+);
 
 const Dashboard = () => {
   const { username: userParam } = useParams();
@@ -15,7 +32,6 @@ const Dashboard = () => {
 
   const user = data?.me || data?.user || {};
 
-  // Navigate to personal profile page if username is yours
   if (Auth.loggedIn() && Auth.getProfile().data.username === userParam) {
     return <Navigate to="/me" />;
   }
@@ -60,17 +76,7 @@ const Dashboard = () => {
               <p>Date: {workout.date}</p>
               <ul>
                 {workout.exercises.map((exercise, index) => (
-                  <li key={index}>
-                    <p>Exercise: {exercise.name}</p>
-                    <ul>
-                      {exercise.sets.map((set, setIndex) => (
-                        <li key={setIndex}>
-                          <p>Reps: {set.reps}</p>
-                          <p>Weight: {set.weight}</p>
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
+                  <ExerciseDetails key={index} exercise={exercise} />
                 ))}
               </ul>
             </li>
