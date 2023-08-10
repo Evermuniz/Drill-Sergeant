@@ -60,11 +60,8 @@ const typeDefs = gql`
     addGoal(goalText: String!, endDate: String): Goal
     addWorkout(exercises: [ExerciseInput]!): Workout
     addExercise(workoutId: ID!, exercise: ExerciseInput!): Workout
-    addSet(exerciseId: ID!, set: SetInput!): Exercise
     removeGoal(goalId: ID!): Goal
     removeWorkout(workoutId: ID!): Workout
-    removeExercise(workoutId: ID!, exerciseId: ID!): Workout
-    removeSet(exerciseId: ID!, setId: ID!): Exercise
   }
 
   input SetInput {
