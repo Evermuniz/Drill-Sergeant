@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client";
 import { ADD_WORKOUT } from "../utils/mutations";
 import { QUERY_ME } from "../utils/queries";
 
-const apiKey = "okHBdIqFHCmm+1cNKVgbkA==nQJoO9i4TaJ8a2Pn";
+const apiKey = "process.env.REACT_APP_API_KEY";
 const apiURL = "https://api.api-ninjas.com/v1/exercises?";
 
 const Workouts = () => {
