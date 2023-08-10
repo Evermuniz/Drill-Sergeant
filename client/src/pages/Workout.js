@@ -5,7 +5,6 @@ import { ADD_WORKOUT } from "../utils/mutations";
 import { QUERY_ME } from "../utils/queries";
 
 const apiKey = process.env.REACT_APP_API_KEY;
-console.log("API Key:", apiKey);
 const apiURL = "https://api.api-ninjas.com/v1/exercises?";
 
 const Workouts = () => {
