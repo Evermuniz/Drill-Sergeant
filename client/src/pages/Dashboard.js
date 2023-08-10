@@ -67,15 +67,14 @@ const Dashboard = () => {
       </div>
       <div className="card mb-3">
         <h3 className="text-center">Goals:</h3>
-        
-          {user.goals.map((goal) => (
-            <div className="card p-2 mb-3" key={goal._id}>
-              <p className="card-title">Goal: {goal.goalText}</p>
-              <p>Created On: {goal.createdAt}</p>
-              <p>Due Date: {goal.endDate}</p>
-            </div>
-          ))}
-       
+
+        {user.goals.map((goal) => (
+          <div className="card p-2 mb-3" key={goal._id}>
+            <p className="card-title">Goal: {goal.goalText}</p>
+            <p>Created On: {goal.createdAt}</p>
+            <p>Due Date: {goal.endDate}</p>
+          </div>
+        ))}
       </div>
       <div className="card p-2">
         <h3 className="text-center">Previous Workouts:</h3>
@@ -88,10 +87,10 @@ const Dashboard = () => {
                   <ExerciseDetails key={index} exercise={exercise} />
                 ))}
               </ul>
-
-              <button onClick={() => handleDeleteWorkout(workout._id)}>Delete</button>
-            </li>
-
+              <li>
+                <button onClick={() => handleDeleteWorkout(workout._id)}>Delete</button>
+              </li>
+            </div>
           ))}
         </div>
       </div>
