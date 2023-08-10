@@ -1,7 +1,8 @@
 import React from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-
+import { useQuery, useMutation } from '@apollo/client';
+import { QUERY_WORKOUTS } from '../utils/queries';
+import { REMOVE_WORKOUT } from '../utils/mutations';
 import { QUERY_USER, QUERY_ME } from '../utils/queries';
 import Auth from '../utils/auth';
 
@@ -29,6 +30,18 @@ const Dashboard = () => {
   const { loading, data } = useQuery(userParam ? QUERY_USER : QUERY_ME, {
     variables: { username: userParam },
   });
+  const [deleteWorkout] = useMutation(REMOVE_WORKOUT);
+
+  const handleDeleteWorkout = async (workoutId) => {
+    try {
+      await deleteWorkout({
+        variables: { workoutId },
+        refetchQueries: [{ query: QUERY_WORKOUTS }, { query: QUERY_ME }],
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const user = data?.me || data?.user || {};
 
@@ -79,6 +92,7 @@ const Dashboard = () => {
                   <ExerciseDetails key={index} exercise={exercise} />
                 ))}
               </ul>
+              <button onClick={() => handleDeleteWorkout(workout._id)}>Delete</button>
             </li>
           ))}
         </ul>
