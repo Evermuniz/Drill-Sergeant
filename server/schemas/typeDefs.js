@@ -1,3 +1,4 @@
+// set up typeDefs to match the resolvers
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`

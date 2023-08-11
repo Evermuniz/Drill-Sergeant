@@ -1,3 +1,4 @@
+// setting up server to use Apollo Server and GraphQL
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');

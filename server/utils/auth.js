@@ -1,3 +1,4 @@
+// using jwt to verify the user and sign the token, put our secret in a .env file to protect it
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
