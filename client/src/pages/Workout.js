@@ -6,7 +6,7 @@ import { QUERY_ME } from "../utils/queries";
 import apiKey from "../../../server/server";
 
 const apiKey = process.env.REACT_APP_API_KEY;
-const apiURL = "https://api.api-ninjas.com/v1/exercises?";
+// const apiURL = "https://api.api-ninjas.com/v1/exercises?";
 
 const Workouts = () => {
   const [selectedType, setSelectedType] = useState("");

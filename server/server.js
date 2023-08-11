@@ -4,7 +4,7 @@ const path = require('path');
 const { authMiddleware } = require('./utils/auth');
 const apiKey = process.env.REACT_APP_API_KEY;
 
-export default apiKey;
+
 
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
@@ -43,3 +43,5 @@ const startApolloServer = async () => {
   
 // Call the async function to start the server
   startApolloServer();
+
+  export default apiKey;
