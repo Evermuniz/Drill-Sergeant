@@ -17,13 +17,7 @@ Introducing "Drill Sergeant" – the uncompromising fitness app that brings the 
 Here is a link to our deployed app: 
 
 Here are some screenshots showing the app functionality:
- ![Screenshot](./client/src/images/Drill-Sergeant-1.png)
-    ![Screenshot](./client/src/images/Drill-Sergeant-2.png)
-    ![Screenshot](./client/src/images/Drill-Sergeant-3.png)
-    ![Screenshot](./client/src/images/Drill-Sergeant-4.png)
-    ![Screenshot](./client/src/images/Drill-Sergeant-5.png)
-    ![Screenshot](./client/src/images/Drill-Sergeant-6.png)
-    ![Screenshot](./client/src/images/Drill-Sergeant-7.png)
+ 
 
 ## Installation
 Have Node.JS installed on your computer.
