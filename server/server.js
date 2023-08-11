@@ -12,10 +12,6 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: authMiddleware,
-  persistedQueries: {
-    cache: 'bounded',
-  },
-  persistedQueries: false,
 });
 
 app.use(express.urlencoded({ extended: false }));
