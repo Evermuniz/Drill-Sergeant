@@ -37,7 +37,7 @@ const Header = () => {
   return (
     <nav className="navbar bg-body-tertiary fixed-top header">
       <div className="col-1 ps-3">
-        <img src={logo} width="50" ></img>
+        <img src={logo} alt="logo" width="50" ></img>
       </div>
       <div className="container-fluid col-11">
         <Link className="navbar-brand" to="/">

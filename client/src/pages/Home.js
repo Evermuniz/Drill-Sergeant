@@ -31,7 +31,6 @@ function Home() {
     </div>
   ));
 
-  const home = useRef();
 
 
   useEffect(() => {
