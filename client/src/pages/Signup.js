@@ -1,3 +1,7 @@
+// Comments by Ever Muniz
+
+// importing all neccessary components
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -6,14 +10,17 @@ import { ADD_USER } from '../utils/mutations';
 
 import Auth from '../utils/auth';
 
+// form for signing up
 const Signup = () => {
   const [formState, setFormState] = useState({
     username: '',
     email: '',
     password: '',
   });
+  // mutation for adding a user
   const [addUser, { error, data }] = useMutation(ADD_USER);
 
+  // handle change for the form using the useState hook
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -23,6 +30,7 @@ const Signup = () => {
     });
   };
 
+  // handle form submit for the form
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     console.log(formState);
@@ -38,6 +46,7 @@ const Signup = () => {
     }
   };
 
+  // render the form
   return (
     <main className="flex-row justify-center mb-4 notHome mt-5">
       <div className="col-12 col-lg-10">

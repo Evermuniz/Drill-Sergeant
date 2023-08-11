@@ -1,3 +1,6 @@
+/* Comments by Ever Muniz */
+
+/* universal body styling */
 body {
   margin: 0; 
   padding: 0; 
@@ -6,21 +9,25 @@ body {
   flex-direction: column;
 }
 
+/* styling separate for home and non home pages due to animation */
 .notHome {
   flex: 1; 
   padding-top: 200px;
   min-height: 100vh;
 }
 
+/* navbar styling */
 nav {
   height: 100px;
 }
 
+/* fix footer at the bottom of the page */
 footer {
   margin-top: auto;
   
 }
 
+/* breakpoint for screen sizes to hide/display logo */
 @media (max-width: 768px) {
  .header img {
     display: none;
@@ -36,6 +43,7 @@ footer {
   }
  }
 
+ /* home page styling */
 .home {
   background: url("../src/images/logo.png") no-repeat center center fixed;
   -webkit-background-size: contain;

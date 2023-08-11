@@ -1,12 +1,22 @@
+// comments by Ever Muniz
+
 import React, { useState, useEffect } from "react";
+
+// rating modal from components
 import RatingModal from "../components/Modal";
+
+// import mutations and queries for apollo
 import { useMutation } from "@apollo/client";
 import { ADD_WORKOUT } from "../utils/mutations";
 import { QUERY_ME } from "../utils/queries";
 
+// import api key from local .env
+// same key is added to config vars in heroku
 const apiKey = process.env.REACT_APP_API_KEY;
+// api url without query parameters
 const apiURL = "https://api.api-ninjas.com/v1/exercises?";
 
+// lots of state variables to control rendering of components on this page
 const Workouts = () => {
   const [selectedType, setSelectedType] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
@@ -23,6 +33,7 @@ const Workouts = () => {
   const [selectedExerciseDifficulty, setSelectedExerciseDifficulty] = useState("");
   const [selectedExerciseEquipment, setSelectedExerciseEquipment] = useState("");
 
+  // effect to trigger api call when selectedOption changes
   useEffect(() => {
     const fetchApiData = async () => {
       try {
@@ -39,6 +50,7 @@ const Workouts = () => {
     }
   }, [selectedOption]);
 
+  //  effect to filter options selected type changes
   useEffect(() => {
     const updateOptions = () => {
       switch (selectedType) {
@@ -59,17 +71,20 @@ const Workouts = () => {
     updateOptions();
   }, [selectedType]);
 
+  // function to label type dropdown based on selected type and set state
   const handleDropdownChange = (event) => {
     const selectedType = event.target.textContent.toLowerCase();
     setSelectedType(selectedType);
     setSelectedOption("");
   };
 
+  // function to label option dropdown based on selected option and set state
   const handleOptionChange = (event) => {
     const selectedOption = event.target.textContent.toLowerCase();
     setSelectedOption(selectedOption);
   };
 
+  // function to set selected exercises and setting state to retrieve other data from api
   const handleExerciseOptionChange = (event) => {
     const selectedExercise = event.target.value;
 
@@ -94,12 +109,14 @@ const Workouts = () => {
     setWorkoutSelected(selectedExercises.size > 0);
   };
 
+  // change states for different components to render
   const beginWorkout = () => {
     setWorkoutStarted(true);
     setWorkoutSelected(false);
     setWorkoutInProgress(false);
   };
 
+  // mutation to save workout to cache with all the needed data since we can have multiple exercises in a workout
   const [addWorkout] = useMutation(ADD_WORKOUT, {
     update(cache, { data }) {
       const existingUserData = cache.readQuery({ query: QUERY_ME });
@@ -130,6 +147,7 @@ const Workouts = () => {
     },
   });
 
+  // function to save completed workout to database
   const saveWorkoutToDatabase = async () => {
     try {
       // Convert reps and weight to integers
@@ -173,6 +191,7 @@ const Workouts = () => {
     }
   };
 
+  // function to finish workout and save to database
   const finishWorkout = async () => {
     setWorkoutInProgress(false);
     setSavedWorkouts([]);
@@ -185,7 +204,7 @@ const Workouts = () => {
 
     await saveWorkoutToDatabase();
   };
-
+  // mapping through saved workouts to display
   const exerciseArray = savedWorkouts.map((exercise) => ({
     name: exercise.exerciseName,
     sets: exercise.sets,
@@ -193,10 +212,12 @@ const Workouts = () => {
     weight: exercise.weight,
   }));
 
+  // using state to reset the values for the inputs
   const [sets, setSets] = useState(0);
   const [reps, setReps] = useState(0);
   const [weight, setWeight] = useState(0);
 
+  // functions to set state for inputs
   const handleSetsChange = (e) => {
     setSets(e.target.value);
   };
@@ -209,6 +230,7 @@ const Workouts = () => {
     setWeight(e.target.value);
   };
 
+  // function to save exercise and reset the exercise inputs
   const saveExercise = () => {
     setWorkoutStarted(false);
     const exerciseData = {
@@ -228,7 +250,7 @@ const Workouts = () => {
     setApiDataList([]);
     setWorkoutInProgress(true);
   };
-
+  // user input for exercise
   const ExerciseInput = ({ exerciseName }) => {
     return (
       <div className="card d-flex justify-content-center text-center">
@@ -254,6 +276,7 @@ const Workouts = () => {
     );
   };
 
+  // function to make the api call
   const makeApiCall = () => {
     const apiURLWithOptions = `${apiURL}${selectedType}=${selectedOption}`;
     console.log("API URL:", apiURLWithOptions);
@@ -276,6 +299,7 @@ const Workouts = () => {
       });
   };
 
+  // array of options for the dropdown menu, name and key separated for future development
   const type = [
     {
       name: "Cardio",
@@ -377,6 +401,7 @@ const Workouts = () => {
     },
   ];
 
+  // function to handle the dropdown menu
   return (
     <div className="notHome">
       <div>
@@ -385,7 +410,9 @@ const Workouts = () => {
       <div className="d-flex flex-row align-items-center">
         {!workoutStarted && (
           <section id="workoutSelection" className="mt-5 col-6 p-2">
+            {/* rating modal triggered with state */}
             {modalShow && <RatingModal show={modalShow} onHide={() => setModalShow(false)} />}
+            {/* dropdown menu handling all the functions specified earlier */}
             <div className="card">
               <div className="dropdown-center card-body text-center">
                 <button
@@ -459,6 +486,7 @@ const Workouts = () => {
           </section>
         )}
 
+        {/* used to display information about the selected exercise */}
         <div className="exerciseTracker col-6 mt-5">
           <div>
             {workoutSelected && selectedExerciseOption && (
@@ -492,6 +520,7 @@ const Workouts = () => {
         </div>
       </div>
 
+      {/* used to display the workout in progress with all saved exercises*/}
       <div className="mt-5">
         <div className="card-body d-flex justify-content-center">
           {workoutInProgress && (
@@ -514,7 +543,7 @@ const Workouts = () => {
                   </li>
                 </div>
               ))}
-
+              {/* end the workout */}
               <div className="p-2 text-center mt-5">
                 <button className="btn btn-primary" onClick={finishWorkout}>
                   Finish Workout
@@ -524,6 +553,7 @@ const Workouts = () => {
           )}
         </div>
 
+{/* render the exercise input form here from the code earlier  */}
         <div>
           {workoutStarted && (
             <div>

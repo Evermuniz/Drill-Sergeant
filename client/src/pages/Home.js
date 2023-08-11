@@ -1,6 +1,10 @@
-import React, { useEffect, useRef } from "react";
+// Comments by Ever Muniz
+
+// importing react and green sock for animation
+import React, { useEffect } from "react";
 import { gsap } from "gsap";
 
+// fake testimonial data
 function Home() {
   const testimonialsData = [
     {
@@ -20,6 +24,7 @@ function Home() {
       body: "Drill Sergeant Fitness is the perfect blend of tough love and comic relief. The workouts are challenging, and the insults are hilariously motivating. It's like having a personal cheerleader who also happens to be a stand-up comedian!",
     },
   ];
+  // mapping the testimonial data over a single component
   const testimonialsList = testimonialsData.map((testimonialsData, index) => (
     <div key={index} className="card mb-3 testimonials">
       <div className="card-body">
@@ -32,7 +37,7 @@ function Home() {
   ));
 
 
-
+// animation for home page from green sock
   useEffect(() => {
     gsap.to(".box", {
       y: -100,
@@ -44,6 +49,7 @@ function Home() {
     });
   }, []);
 
+  // render the home page
   return (
     <main className="home">
       {" "}
