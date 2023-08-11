@@ -1,3 +1,4 @@
+// set up Quote model to store the Drill Sergeant's quotes
 const { Schema, model } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 

@@ -1,3 +1,4 @@
+// created Goal model that will be connected to User model, using dateFormat util to format date
 const { Schema, model } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 

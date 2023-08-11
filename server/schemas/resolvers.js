@@ -1,9 +1,11 @@
+// Purpose: to define the query and mutation functionality to work with the Mongoose models and use them with Apollo Server and GraphQL
 const { AuthenticationError } = require('apollo-server-express');
 const { User, Goal, Quote, Workout, SetSchema, exerciseSchema, } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
+    // set up queries, users will populate goals and workouts connected to the user
     users: async () => {
       return User.find().populate('goals workouts');
     },
@@ -36,6 +38,7 @@ const resolvers = {
   },
 
   Mutation: {
+    // set up the mutations to work in typeDefs and the client side
     addUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user);
@@ -58,6 +61,7 @@ const resolvers = {
 
       return { token, user };
     },
+    // set up goal to be created before adding to the user
     addGoal: async (parent, { goalText, endDate }, context) => {
       if (context.user) {
         const goal = await Goal.create({
@@ -74,6 +78,7 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
+    // set up workout to be created before adding exercises and be connected to the user
     addWorkout: async (parent, { exercises }, context) => {
       if (context.user) {
         const workout = await Workout.create({
@@ -89,9 +94,9 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     }, 
+    // set up exercises to be connected to a single workout and the ability to add multiple exercises to a workout using the $push method
     addExercise: async (parent, { workoutId , exercise }, context) => {
       if (context.user) {
-        // i need to grab the workout id and push the exercise to the workout and need the name and sets to hold the data
         const { name, sets } = exercise;
       
         const workout = await Workout.findOne ({ _id: workoutId});
@@ -109,6 +114,7 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
+    // set up the ability to remove a goal and remove it from the user's goals array
     removeGoal: async (parent, { goalId }, context) => {
       if (context.user) {
         const goal = await Goal.findOneAndDelete({
@@ -124,6 +130,7 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
+    // set up the ability to remove a workout and remove it from the user's workouts array, all exercises inside the workout will be removed as well
     removeWorkout: async (parent, { workoutId }, context) => {
       if (context.user) {
         const workout = await Workout.findOneAndDelete({ _id: workoutId });

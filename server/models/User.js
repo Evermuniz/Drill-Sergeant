@@ -1,3 +1,4 @@
+// User model that sets up login info for users and connects to Goal and Workout models
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 

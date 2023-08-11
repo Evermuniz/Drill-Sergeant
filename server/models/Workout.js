@@ -1,3 +1,4 @@
+// used subdocument schema to create a nested document for the exercises array to put in the workout model for multiple exercises in a workout
 const { Schema, model } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 
