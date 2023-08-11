@@ -2,6 +2,9 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
 const { authMiddleware } = require('./utils/auth');
+const apiKey = process.env.REACT_APP_API_KEY;
+
+export default apiKey;
 
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
