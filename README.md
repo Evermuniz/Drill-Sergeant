@@ -33,9 +33,9 @@ To install necessary dependencies, run the following command on the outer most d
 Email creators for usage rights and instructions.
 
 ## Credits
-* [Tyler Mifflin]
-* [Ever Muniz]
-* [Connor McGrew]
-* [Conner Christensen]
+* Tyler Mifflin [GitHub profile](https://github.com/tylermifflin)
+* Ever Muniz [GitHub profile](https://github.com/Evermuniz)
+* Connor McGrew [GitHub profile](https://github.com/connormcgrew)
+* Conner Christensen [GitHub profile](https://github.com/Conneroc03)
 
 
