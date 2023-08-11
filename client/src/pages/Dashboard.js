@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
@@ -79,7 +78,7 @@ const Dashboard = () => {
       <div className="card p-2">
         <h3 className="text-center">Previous Workouts:</h3>
         <div>
-          {user.workouts.map((workout) => (
+          {user.workouts.slice().reverse().map((workout) => (
             <div className="card p-2 mb-3" key={workout._id}>
               <p className="card-title">Date: {workout.date}</p>
               <ul>
